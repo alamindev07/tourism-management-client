@@ -57,7 +57,7 @@ const router = createBrowserRouter([
         path: 'admin/manage-users',
         element: (
           <RoleBasedRoute allowedRoles={['admin']}>
-            <ManageUsers />
+       <ManageUsers />
           </RoleBasedRoute>
         ),
       },
