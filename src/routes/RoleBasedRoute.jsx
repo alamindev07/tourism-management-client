@@ -5,6 +5,7 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import useRole from '../hooks/useRole';
+import LoadingSpinner from '../pages/LoadingSpiner/LoadingSpinner';
 
 const RoleBasedRoute = ({ allowedRoles, children }) => {
   const { user, loading } = useAuth();
@@ -12,7 +13,7 @@ const RoleBasedRoute = ({ allowedRoles, children }) => {
   const location = useLocation();
 
   if (loading || roleLoading) {
-    return <div className="text-center py-10">Loading...</div>;
+    return <div className=""><LoadingSpinner></LoadingSpinner></div>;
   }
 
   if (!user || !allowedRoles.includes(role)) {

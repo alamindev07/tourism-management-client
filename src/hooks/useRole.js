@@ -1,31 +1,35 @@
 
-// hooks/useRole.js
-import { useEffect, useState } from 'react';
-import useAuth from './useAuth';
-import useAxiosSecure from './useAxiosSecure';
+
+import { useEffect, useState } from "react";
+import useAuth from "./useAuth";
+import useAxiosSecure from "./useAxiosSecure";
 
 const useRole = () => {
   const { user, loading } = useAuth();
-  const axiosSecure = useAxiosSecure();
   const [role, setRole] = useState(null);
-  const [roleLoading, setRoleLoading] = useState(true);
+  const [isRoleLoading, setIsRoleLoading] = useState(true);
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
     if (!loading && user?.email) {
-      axiosSecure.get(`/api/users/${user.email}`)
+      
+
+      axiosSecure.get(`api/users/${user.email}`)
         .then(res => {
-          console.log("Fetched user role:", res.data?.role); // ✅ Log it
-          setRole(res.data?.role);
+          console.log("Fetched user role:", res.data?.role, "for", user.email);
+          setRole(res.data?.role || "tourist");
         })
         .catch(err => {
-          console.error("Error fetching user role:", err);
-          setRole(null);
+          console.error("❌ Failed to fetch role", err);
+          setRole("tourist");
         })
-        .finally(() => setRoleLoading(false));
+        .finally(() => {
+          setIsRoleLoading(false);
+        });
     }
   }, [user, loading, axiosSecure]);
 
-  return [role, roleLoading];
+  return [role, isRoleLoading];
 };
 
 export default useRole;

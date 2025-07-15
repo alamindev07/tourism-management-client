@@ -21,7 +21,6 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Save user to MongoDB if not already saved
   const saveUserToDB = async (firebaseUser) => {
     if (!firebaseUser?.email) return;
 

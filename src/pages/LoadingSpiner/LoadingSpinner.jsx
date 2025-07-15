@@ -1,38 +1,42 @@
+
+
 import React from "react";
 
-const LoadingSpinner = ({
-  size = 64,
-  color = "rgba(255, 255, 255, 0.8)",
-  borderWidth = 4,
-  speed = "1s",
-}) => {
-  const spinnerStyle = {
-    width: `${size}px`,
-    height: `${size}px`,
-    borderTop: `${borderWidth}px solid ${color}`,
-    borderRight: `${borderWidth}px solid transparent`,
-    animation: `spin ${speed} linear infinite`,
-  };
-
+const LoadingSpinner = ({ size = 80, speed = "1s" }) => {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#1e1e2f] to-[#2a2a4f]">
-      <div className="relative">
-        {/* Blurred Ring */}
-        <div className="absolute inset-0 rounded-full animate-pulse"
-             style={{
-               background: 'radial-gradient(circle, rgba(255,255,255,0.1), transparent)',
-               filter: 'blur(4px)',
-             }}></div>
-
-        {/* Spinner */}
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-purple-100 to-blue-200">
+      <div
+        className={`relative`}
+        style={{ width: `${size}px`, height: `${size}px` }}
+      >
+        {/* Glowing Outer Ring with moving */}
         <div
-          className="rounded-full border-solid"
-          style={spinnerStyle}
+          className="absolute inset-0 rounded-full animate-pulse"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(124,58,237,0.2), transparent)",
+            filter: "blur(6px)",
+          }}
+        ></div>
+
+        {/* Spinner Ring */}
+        <div
+          className={`animate-spin rounded-full border-[6px] border-t-transparent border-b-transparent border-l-purple-500 border-r-blue-500`}
+          style={{
+            width: `${size}px`,
+            height: `${size}px`,
+            animationDuration: speed,
+          }}
+        ></div>
+
+        {/* Inner Glow Circle */}
+        <div
+          className="absolute inset-3 rounded-full bg-white/60 backdrop-blur-[2px]"
+          style={{
+            boxShadow: "inset 0 0 8px rgba(255,255,255,0.3)",
+          }}
         ></div>
       </div>
-
-      {/* Optional Label */}
-      {/* <p className="ml-4 text-white text-lg animate-pulse">Loading...</p> */}
     </div>
   );
 };

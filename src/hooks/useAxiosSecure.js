@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const useAxiosSecure = () => {
   const instance = axios.create({
-    baseURL: 'http://localhost:5000', // Change to your actual backend URL
+    baseURL: 'http://localhost:5000', 
   });
 
   instance.interceptors.request.use(config => {

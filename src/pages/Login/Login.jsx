@@ -5,7 +5,8 @@ import { FcGoogle } from "react-icons/fc";
 import loginImage from "../../assets/login.json";
 import { AuthContext } from "../../context/AuthProvider";
 import Lottie from "lottie-react";
-import { saveUserToDB } from "../../api/saveUser";
+import { saveUserToDB } from "../../api/saveUserToDB";
+
 
 const Login = () => {
   const { login, signInWithGoogle, resetPassword } = useContext(AuthContext);
