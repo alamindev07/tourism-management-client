@@ -1,58 +1,11 @@
 
-
-
-// import { createBrowserRouter } from 'react-router-dom';
-// import MainLayout from '../layout/MainLayout';
-// import DashboardLayout from '../layout/DashboardLayout';
-// import PrivateRoute from '../auth/PrivateRoute';
-
-// import Home from '../pages/Home/Home';
-// import About from '../pages/About/About';
-// import Trips from '../pages/Trips/Trips';
-// import Community from '../pages/Community/Community';
-// import Login from '../pages/Login/Login';
-// import Register from '../pages/Register/Register';
-
-// import DashboardHome from '../pages/Dashboard/DashboardHome';
-
-// const router = createBrowserRouter([
-//   {
-//     path: '/',
-//     element: <MainLayout />,
-//     children: [
-//       { path: '/', element: <Home /> },
-//       { path: '/about', element: <About /> },
-//       { path: '/trips', element: <Trips /> },
-//       { path: '/community', element: <Community /> },
-//       { path: '/login', element: <Login /> },
-//       { path: '/register', element: <Register /> },
-//     ],
-//   },
-//   {
-//     path: '/dashboard',
-//     element: (
-//       <PrivateRoute>
-//         <DashboardLayout />
-//       </PrivateRoute>
-//     ),
-//     children: [
-//       { path: '', element: <DashboardHome /> }, // Default dashboard landing
-//       // Add role-based routes here later
-//     ],
-//   },
-// ]);
-
-// export default router;
-
-
-
-
-
+// src/routes/router.jsx
 import { createBrowserRouter } from 'react-router-dom';
 import MainLayout from '../layout/MainLayout';
 import DashboardLayout from '../layout/DashboardLayout';
+
 import PrivateRoute from '../auth/PrivateRoute';
-import RoleBasedRoute from '../auth/RoleBasedRoute'; // role-based access wrapper
+import RoleBasedRoute from './RoleBasedRoute';
 
 import Home from '../pages/Home/Home';
 import About from '../pages/About/About';
@@ -61,11 +14,13 @@ import Community from '../pages/Community/Community';
 import Login from '../pages/Login/Login';
 import Register from '../pages/Register/Register';
 
-import DashboardHome from '../pages/Dashboard/DashboardHome';
-import TouristPanel from '../pages/Dashboard/Tourist/TouristPanel';
-import GuidePanel from '../pages/Dashboard/TourGuide/GuidePanel';
 import AdminPanel from '../pages/Dashboard/Admin/AdminPanel';
+import GuidePanel from '../pages/Dashboard/TourGuide/GuidePanel';
+import TouristPanel from '../pages/Dashboard/Tourist/TouristPanel';
+import ManageUsers from '../pages/Dashboard/Admin/ManageUsers';
+
 import Unauthorized from '../pages/Unauthorized/Unauthorized';
+import DashboardRedirect from '../pages/Dashboard/DashboardRedirect';
 
 const router = createBrowserRouter([
   {
@@ -78,7 +33,6 @@ const router = createBrowserRouter([
       { path: '/community', element: <Community /> },
       { path: '/login', element: <Login /> },
       { path: '/register', element: <Register /> },
-       { path: '/unauthorized', element: <Unauthorized /> },
     ],
   },
   {
@@ -89,22 +43,45 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      { path: '', element: <DashboardHome /> }, // Default dashboard landing
+      { index: true, element: <DashboardRedirect /> },
 
-      // Role based routes:
       {
-        element: <RoleBasedRoute allowedRoles={['tourist']} />,
-        children: [{ path: 'tourist', element: <TouristPanel /> }],
+        path: 'admin',
+        element: (
+          <RoleBasedRoute allowedRoles={['admin']}>
+            <AdminPanel />
+          </RoleBasedRoute>
+        ),
       },
       {
-        element: <RoleBasedRoute allowedRoles={['guide']} />,
-        children: [{ path: 'guide', element: <GuidePanel /> }],
+        path: 'admin/manage-users',
+        element: (
+          <RoleBasedRoute allowedRoles={['admin']}>
+            <ManageUsers />
+          </RoleBasedRoute>
+        ),
       },
       {
-        element: <RoleBasedRoute allowedRoles={['admin']} />,
-        children: [{ path: 'admin', element: <AdminPanel /> }],
+        path: 'guide',
+        element: (
+          <RoleBasedRoute allowedRoles={['tourguide']}>
+            <GuidePanel />
+          </RoleBasedRoute>
+        ),
+      },
+      {
+        path: 'tourist',
+        element: (
+          <RoleBasedRoute allowedRoles={['tourist']}>
+            <TouristPanel />
+          </RoleBasedRoute>
+        ),
       },
     ],
+  },
+  {
+    path: '/unauthorized',
+    element: <Unauthorized />,
   },
 ]);
 

@@ -2,12 +2,13 @@ import { useContext, useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
-import loginImage from "../../assets/login.json"; 
+import loginImage from "../../assets/login.json";
 import { AuthContext } from "../../context/AuthProvider";
 import Lottie from "lottie-react";
+import { saveUserToDB } from "../../api/saveUser";
 
 const Login = () => {
-  const { signInUser, signInWithGoogle, resetPassword } = useContext(AuthContext);
+  const { login, signInWithGoogle, resetPassword } = useContext(AuthContext);
   const [error, setError] = useState("");
   const [emailForReset, setEmailForReset] = useState("");
   const navigate = useNavigate();
@@ -24,21 +25,43 @@ const Login = () => {
     setEmailForReset(email);
 
     try {
-      await signInUser(email, password);
+      const result = await login(email, password);
+      const user = result.user;
+
+      try {
+        // Save user to DB with default role
+        await saveUserToDB(user);
+      } catch (saveErr) {
+        console.error("Failed to save user after login:", saveErr);
+        // Optional: toast.error("Failed to save user info to database");
+      }
+
       toast.success("Login successful!");
       navigate(from, { replace: true });
     } catch (err) {
-      setError(err.message);
-      toast.error("Invalid email or password");
+      console.error("Login error:", err);
+      setError("Invalid email or password");
+      toast.error("Login failed");
     }
   };
 
   const handleGoogleLogin = async () => {
+    setError("");
     try {
-      await signInWithGoogle();
+      const result = await signInWithGoogle();
+      const user = result.user;
+
+      try {
+        await saveUserToDB(user);
+      } catch (saveErr) {
+        console.error("Failed to save Google user:", saveErr);
+        // Optional: toast.error("Failed to save user info to database");
+      }
+
       toast.success("Logged in with Google!");
       navigate(from, { replace: true });
     } catch (err) {
+      console.error("Google login error:", err);
       setError("Google sign-in failed.");
       toast.error("Google sign-in failed.");
     }
@@ -54,20 +77,17 @@ const Login = () => {
       await resetPassword(emailForReset);
       toast.success("Password reset email sent!");
     } catch (err) {
+      console.error("Password reset error:", err);
       toast.error("Failed to send reset email");
-      console.error(err);
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-slate-50 to-slate-100 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-6xl bg-white shadow-2xl rounded-3xl overflow-hidden grid md:grid-cols-2">
-        
-  
-         {/* Left animation side */}
+        {/* Left animation side */}
         <div className="hidden md:flex items-center justify-center bg-slate-200 p-6">
           <Lottie animationData={loginImage} loop={true} className="w-full h-96" />
-          
         </div>
 
         {/* Right Form Side */}

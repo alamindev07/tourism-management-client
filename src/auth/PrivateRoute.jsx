@@ -17,7 +17,5 @@ const PrivateRoute = ({ children }) => {
 export default PrivateRoute
 
 
-// if (loading) return <LoadingSpinner />;
-// if (!user) return <Navigate to="/login" />;
-// return children;
+
 

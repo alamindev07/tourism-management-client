@@ -1,6 +1,3 @@
-
-
-
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import {
@@ -12,11 +9,13 @@ import {
   FaArrowLeft,
 } from "react-icons/fa";
 import { AuthContext } from "../context/AuthProvider";
+import useRole from "../hooks/useRole"; // 👈 Add this if you haven't already
 
 const DashboardLayout = () => {
   const { user } = useContext(AuthContext);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
+  const { role } = useRole(); // 👈 get role from backend (admin, guide, tourist)
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const handleBackHome = () => navigate("/");
@@ -41,24 +40,21 @@ const DashboardLayout = () => {
           isSidebarOpen ? "block" : "hidden"
         } md:block`}
       >
-       
-
         <div className="mb-4">
-  <h2 className="text-xl font-bold text-slate-700">Dashboard Menu</h2>
-  {user && (
-    <div className="mt-2 flex items-center gap-3 text-sm text-slate-600">
-      <img
-        src={user.photoURL || "https://via.placeholder.com/40"}
-        alt="User Profile"
-        className="w-10 h-10 rounded-full object-cover"
-      />
-      <div className="font-semibold truncate">
-        {user.displayName || user.email}
-      </div>
-    </div>
-  )}
-</div>
-
+          <h2 className="text-xl font-bold text-slate-700">Dashboard Menu</h2>
+          {user && (
+            <div className="mt-2 flex items-center gap-3 text-sm text-slate-600">
+              <img
+                src={user.photoURL || "https://via.placeholder.com/40"}
+                alt="User Profile"
+                className="w-10 h-10 rounded-full object-cover"
+              />
+              <div className="font-semibold truncate">
+                {user.displayName || user.email}
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Back Home Button */}
         <button
@@ -79,44 +75,74 @@ const DashboardLayout = () => {
               }`
             }
           >
-            <FaHome /> Home
+            <FaHome /> Dashboard Home
           </NavLink>
 
-          <NavLink
-            to="/dashboard/tourist"
-            onClick={handleLinkClick}
-            className={({ isActive }) =>
-              `flex items-center gap-2 px-3 py-2 rounded-lg ${
-                isActive ? "bg-slate-300 font-semibold" : "hover:bg-slate-200"
-              }`
-            }
-          >
-            <FaUser /> Tourist Panel
-          </NavLink>
+          {/* Role Based Links */}
+          {role === "tourist" && (
+            <NavLink
+              to="/dashboard/tourist"
+              onClick={handleLinkClick}
+              className={({ isActive }) =>
+                `flex items-center gap-2 px-3 py-2 rounded-lg ${
+                  isActive
+                    ? "bg-slate-300 font-semibold"
+                    : "hover:bg-slate-200"
+                }`
+              }
+            >
+              <FaUser /> Tourist Panel
+            </NavLink>
+          )}
 
-          <NavLink
-            to="/dashboard/guide"
-            onClick={handleLinkClick}
-            className={({ isActive }) =>
-              `flex items-center gap-2 px-3 py-2 rounded-lg ${
-                isActive ? "bg-slate-300 font-semibold" : "hover:bg-slate-200"
-              }`
-            }
-          >
-            <FaUsers /> Tour Guide Panel
-          </NavLink>
+          {role === "guide" && (
+            <NavLink
+              to="/dashboard/guide"
+              onClick={handleLinkClick}
+              className={({ isActive }) =>
+                `flex items-center gap-2 px-3 py-2 rounded-lg ${
+                  isActive
+                    ? "bg-slate-300 font-semibold"
+                    : "hover:bg-slate-200"
+                }`
+              }
+            >
+              <FaUsers /> Tour Guide Panel
+            </NavLink>
+          )}
 
-          <NavLink
-            to="/dashboard/admin"
-            onClick={handleLinkClick}
-            className={({ isActive }) =>
-              `flex items-center gap-2 px-3 py-2 rounded-lg ${
-                isActive ? "bg-slate-300 font-semibold" : "hover:bg-slate-200"
-              }`
-            }
-          >
-            <FaUserShield /> Admin Panel
-          </NavLink>
+          {role === "admin" && (
+            <>
+              <NavLink
+                to="/dashboard/admin"
+                onClick={handleLinkClick}
+                className={({ isActive }) =>
+                  `flex items-center gap-2 px-3 py-2 rounded-lg ${
+                    isActive
+                      ? "bg-slate-300 font-semibold"
+                      : "hover:bg-slate-200"
+                  }`
+                }
+              >
+                <FaUserShield /> Admin Panel
+              </NavLink>
+
+              {/* ✅ Manage Users Link visible only to Admins */}
+              <NavLink
+                to="/dashboard/admin/manage-users"
+                onClick={handleLinkClick}
+                className={({ isActive }) =>
+                  `flex items-center gap-2 px-3 py-2 rounded-lg ${
+                    isActive
+                      ? "bg-slate-300 font-semibold"
+                      : "hover:bg-slate-200"
+                  }`
+                }
+              >
+                <FaUsers /> Manage Users
+              </NavLink>
+            </>
+          )}
         </nav>
       </aside>
 
