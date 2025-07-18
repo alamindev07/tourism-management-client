@@ -8,10 +8,10 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   sendPasswordResetEmail,
-} from 'firebase/auth';
-import { createContext, useEffect, useState } from 'react';
-import { auth } from '../auth/firebase.config';
-import axios from 'axios';
+} from "firebase/auth";
+import { createContext, useEffect, useState } from "react";
+import { auth } from "../auth/firebase.config";
+import axios from "axios";
 
 export const AuthContext = createContext();
 
@@ -26,20 +26,23 @@ const AuthProvider = ({ children }) => {
 
     const userData = {
       uid: firebaseUser.uid,
-      name: firebaseUser.displayName || 'Anonymous',
+      name: firebaseUser.displayName || "Anonymous",
       email: firebaseUser.email,
-      photoURL: firebaseUser.photoURL || '',
-      role: 'tourist', // default role
+      photoURL: firebaseUser.photoURL || "",
+      role: "tourist", // default role
     };
 
     try {
-      const res = await axios.post('http://localhost:5000/api/users', userData);
-      console.log('✅ User saved to MongoDB:', res.data);
+      const res = await axios.post(
+        "https://tourism-management-server-two-amber.vercel.app/api/users",
+        userData
+      );
+      console.log("✅ User saved to MongoDB:", res.data);
     } catch (error) {
       if (error.response?.status === 409) {
-        console.log('ℹ️ User already exists in MongoDB');
+        console.log("ℹ️ User already exists in MongoDB");
       } else {
-        console.error('❌ Failed to save user:', error);
+        console.error("❌ Failed to save user:", error);
       }
     }
   };
@@ -106,9 +109,7 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={authInfo}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
 };
 

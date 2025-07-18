@@ -5,7 +5,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { FaUserShield, FaUser } from "react-icons/fa";
 import toast from "react-hot-toast";
 import useAuth from "../../../hooks/useAuth";
-import LoadingSpinner from "../../LoadingSpiner/LoadingSpinner"; // ✅ Adjust path if needed
+import LoadingSpinner from "../../LoadingSpiner/LoadingSpinner"; 
 
 const ManageUsers = () => {
   const { user } = useAuth();

@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const useAxiosSecure = () => {
   const instance = axios.create({
-    baseURL: 'http://localhost:5000', 
+    baseURL: 'https://tourism-management-server-two-amber.vercel.app', 
   });
 
   instance.interceptors.request.use(config => {
@@ -17,6 +17,7 @@ const useAxiosSecure = () => {
   });
 
   return instance;
+
 };
 
 export default useAxiosSecure;

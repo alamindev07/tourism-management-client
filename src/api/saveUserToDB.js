@@ -12,7 +12,7 @@ export const saveUserToDB = async ({ uid, name, email, photoURL, role = "tourist
 
     console.log("📤 Sending user to backend:", cleanedUser); // ✅ Debug
 
-    const res = await axios.post("http://localhost:5000/api/users", cleanedUser, {
+    const res = await axios.post("https://tourism-management-server-two-amber.vercel.app/api/users", cleanedUser, {
       headers: {
         "Content-Type": "application/json", // ✅ Explicitly ensure JSON
       },
