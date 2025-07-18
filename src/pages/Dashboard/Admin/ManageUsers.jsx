@@ -1,37 +1,18 @@
 
-
-
-
-
-
-
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import {
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-} from "../../../components/ui/Table";
-import {
-  useReactTable,
-  getCoreRowModel,
-  flexRender,
-  createColumnHelper,
-} from "@tanstack/react-table";
 import { FaUserShield, FaUser } from "react-icons/fa";
 import toast from "react-hot-toast";
 import useAuth from "../../../hooks/useAuth";
+import LoadingSpinner from "../../LoadingSpiner/LoadingSpinner"; // ✅ Adjust path if needed
 
 const ManageUsers = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
 
-  // Fetch users with TanStack Query
-  const { data: users = [], refetch } = useQuery({
+  // Fetch users with react-query
+  const { data: users = [], isLoading, refetch } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
       const res = await axiosSecure.get("/api/users");
@@ -39,105 +20,84 @@ const ManageUsers = () => {
     },
   });
 
-  // Role Update Handler
+  // Handle role change
   const handleRoleUpdate = async (userId, role) => {
     try {
       const res = await axiosSecure.patch(`/api/users/role/${userId}`, { role });
       if (res.status === 200) {
-        toast.success(`Role updated to ${role}`);
-        refetch();  // Refresh data immediately
+        toast.success(`User role updated to ${role}`);
+        refetch();
       } else {
         toast.error("Failed to update role");
       }
-    } catch (err) {
-      toast.error("Failed to update role");
+    } catch (error) {
+      toast.error("An error occurred");
     }
   };
 
-  // Define Columns
-  const columnHelper = createColumnHelper();
-
-  const columns = [
-    columnHelper.accessor("name", {
-      header: "Name",
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor("email", {
-      header: "Email",
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor("role", {
-      header: "Role",
-      cell: ({ row }) => {
-        const currentRole = row.original.role;
-        return (
-          <span className="capitalize badge badge-info badge-sm">
-            {currentRole}
-          </span>
-        );
-      },
-    }),
-    columnHelper.display({
-      id: "actions",
-      header: "Actions",
-      cell: ({ row }) => {
-        const user = row.original;
-        return (
-          <div className="flex gap-2">
-            <button
-              disabled={user.role === "admin"}
-              className="btn btn-xs btn-outline"
-              onClick={() => handleRoleUpdate(user._id, "admin")}
-            >
-              <FaUserShield className="text-blue-500" /> Admin
-            </button>
-            <button
-              disabled={user.role === "tourguide"}
-              className="btn btn-xs btn-outline"
-              onClick={() => handleRoleUpdate(user._id, "tourguide")}
-            >
-              <FaUser className="text-green-500" /> Tour Guide
-            </button>
-          </div>
-        );
-      },
-    }),
-  ];
-
-  // Setup React Table instance
-  const table = useReactTable({
-    data: users,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+  // Show loading spinner while data is loading
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-96">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-semibold mb-4">Manage Users Role</h2>
-      <Table>
-        <Thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <Tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <Th key={header.id}>
-                  {flexRender(header.column.columnDef.header, header.getContext())}
-                </Th>
-              ))}
-            </Tr>
-          ))}
-        </Thead>
-        <Tbody>
-          {table.getRowModel().rows.map((row) => (
-            <Tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <Td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </Td>
-              ))}
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
+    <div className="p-4 md:p-8">
+      <h2 className="text-2xl font-bold mb-6 text-center text-primary">
+        Manage Users Role
+      </h2>
+
+      <div className="overflow-x-auto shadow-xl rounded-lg border border-base-200">
+        <table className="table table-zebra w-full text-sm md:text-base">
+          <thead className="bg-base-200 text-base-content">
+            <tr>
+              <th className="py-3 px-4">#</th>
+              <th className="py-3 px-4">Name</th>
+              <th className="py-3 px-4">Email</th>
+              <th className="py-3 px-4">Role</th>
+              <th className="py-3 px-4 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((u, index) => (
+              <tr
+                key={u._id}
+                className="hover:bg-base-100 transition-all duration-300"
+              >
+                <td className="px-4 py-2">{index + 1}</td>
+                <td className="px-4 py-2 font-medium">{u.name}</td>
+                <td className="px-4 py-2 text-sm">{u.email}</td>
+                <td className="px-4 py-2">
+                  <span className="badge badge-outline capitalize">
+                    {u.role}
+                  </span>
+                </td>
+                <td className="px-4 py-2 text-center space-x-2">
+                  <button
+                    className="btn btn-sm btn-outline btn-info gap-2"
+                    disabled={u.role === "admin"}
+                    onClick={() => handleRoleUpdate(u._id, "admin")}
+                  >
+                    <FaUserShield className="text-blue-600" />
+                    Admin
+                  </button>
+                  <button
+                    className="btn btn-sm btn-outline btn-success gap-2"
+                    disabled={u.role === "tourguide"}
+                    onClick={() => handleRoleUpdate(u._id, "tourguide")}
+                  >
+                    <FaUser className="text-green-600" />
+                    Tour Guide
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

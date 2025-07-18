@@ -15,9 +15,12 @@ import Login from '../pages/Login/Login';
 import Register from '../pages/Register/Register';
 
 import AdminPanel from '../pages/Dashboard/Admin/AdminPanel';
-import GuidePanel from '../pages/Dashboard/TourGuide/GuidePanel';
-import TouristPanel from '../pages/Dashboard/Tourist/TouristPanel';
 import ManageUsers from '../pages/Dashboard/Admin/ManageUsers';
+
+import GuidePanel from '../pages/Dashboard/TourGuide/GuidePanel';
+import AddPackage from '../pages/Dashboard/TourGuide/AddPackage';
+
+import TouristPanel from '../pages/Dashboard/Tourist/TouristPanel';
 
 import Unauthorized from '../pages/Unauthorized/Unauthorized';
 import DashboardRedirect from '../pages/Dashboard/DashboardRedirect';
@@ -45,6 +48,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <DashboardRedirect /> },
 
+      // Admin Routes
       {
         path: 'admin',
         element: (
@@ -57,10 +61,12 @@ const router = createBrowserRouter([
         path: 'admin/manage-users',
         element: (
           <RoleBasedRoute allowedRoles={['admin']}>
-       <ManageUsers />
+            <ManageUsers />
           </RoleBasedRoute>
         ),
       },
+
+      // Tour Guide Routes
       {
         path: 'guide',
         element: (
@@ -69,6 +75,16 @@ const router = createBrowserRouter([
           </RoleBasedRoute>
         ),
       },
+      {
+        path: 'guide/add-package', // ✅ fixed: removed `dashboard/` prefix
+        element: (
+          <RoleBasedRoute allowedRoles={['tourguide']}>
+            <AddPackage />
+          </RoleBasedRoute>
+        ),
+      },
+
+      // Tourist Route
       {
         path: 'tourist',
         element: (
