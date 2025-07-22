@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import axiosInstance from "../api/axiosInstance";
 import { toast } from "react-hot-toast";
+import Swal from "sweetalert2";
 
 const EditStoryModal = ({ story, onClose, refetch }) => {
   const [title, setTitle] = useState(story.title);
@@ -48,7 +49,12 @@ const EditStoryModal = ({ story, onClose, refetch }) => {
 
       await axiosInstance.put(`/stories/${story._id}`, payload);
 
-      toast.success("Story updated!");
+      Swal.fire({
+  title: "Story updated!",
+  icon: "success",
+  draggable: true
+});
+
       refetch();
       onClose();
     } catch (err) {

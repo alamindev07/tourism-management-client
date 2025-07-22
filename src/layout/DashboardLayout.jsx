@@ -1,6 +1,4 @@
-
-
-import { Outlet, NavLink, useNavigate } from "react-router-dom";
+import { Outlet, NavLink, useNavigate, Link } from "react-router-dom";
 import { useContext, useState } from "react";
 import {
   FaUser,
@@ -59,7 +57,8 @@ const DashboardLayout = () => {
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-tr from-white to-slate-100">
       <div className="flex justify-between items-center p-4 bg-slate-800 text-white md:hidden shadow-md">
-        <h2 className="text-lg font-bold tracking-wide">Dashboard</h2>
+<Link to="/dashboard">        <h2 className="text-lg font-bold tracking-wide">Dashboard</h2>
+</Link>
         <button onClick={toggleSidebar} className="focus:outline-none">
           <FaBars size={24} />
         </button>
@@ -71,7 +70,9 @@ const DashboardLayout = () => {
         } md:block`}
       >
         <div className="mb-6">
-          <h2 className="text-2xl font-extrabold text-slate-800">Tourism Admin</h2>
+          <h2 className="text-2xl font-extrabold text-slate-800">
+            Tourism Admin
+          </h2>
           {user && (
             <div className="mt-4 flex items-center gap-3 text-slate-700">
               <img
@@ -80,7 +81,9 @@ const DashboardLayout = () => {
                 className="w-12 h-12 rounded-full border-2 border-slate-300 object-cover"
               />
               <div className="text-sm leading-5">
-                <p className="font-semibold truncate">{user.displayName || "Anonymous"}</p>
+                <p className="font-semibold truncate">
+                  {user.displayName || "Anonymous"}
+                </p>
                 <p className="text-xs text-slate-500 truncate">{user.email}</p>
               </div>
             </div>
@@ -89,7 +92,7 @@ const DashboardLayout = () => {
 
         <button
           onClick={handleBackHome}
-          className="flex items-center gap-2 text-sm text-slate-700 font-medium bg-slate-100 px-3 py-2 rounded-md hover:bg-slate-200 transition w-full"
+          className="flex items-center gap-2 text-sm text-slate-700 font-medium bg-slate-100 px-3 py-2 rounded-md hover:bg-slate-200 transition w-full btn"
         >
           <FaArrowLeft /> Back to Home
         </button>
@@ -101,10 +104,22 @@ const DashboardLayout = () => {
           {role === "tourist" && (
             <>
               {navItem("/dashboard/profile", <FaUser />, "Manage Profile")}
-              {navItem("/dashboard/bookings", <FaClipboardList />, "My Bookings")}
-              {navItem("/dashboard/manage-stories", <FaBookOpen />, "Manage Stories")}
+              {navItem(
+                "/dashboard/bookings",
+                <FaClipboardList />,
+                "My Bookings"
+              )}
+              {navItem(
+                "/dashboard/manage-stories",
+                <FaBookOpen />,
+                "Manage Stories"
+              )}
               {navItem("/dashboard/stories/add", <FaPlus />, "Add Stories")}
-              {navItem("/dashboard/join-guide", <FaRoute />, "Join as Tour Guide")}
+              {navItem(
+                "/dashboard/join-guide",
+                <FaRoute />,
+                "Join as Tour Guide"
+              )}
             </>
           )}
 
@@ -112,10 +127,17 @@ const DashboardLayout = () => {
           {role === "tourguide" && (
             <>
               {navItem("/dashboard/profile", <FaUser />, "Manage Profile")}
-              {navItem("/dashboard/assigned-tours", <FaMapMarkedAlt />, "My Assigned Tours")}
+              {navItem(
+                "/dashboard/assigned-tours",
+                <FaMapMarkedAlt />,
+                "My Assigned Tours"
+              )}
               {navItem("/dashboard/stories/add", <FaPlus />, "Add Stories")}
-              {navItem("/dashboard/guide/add-package", <FaSuitcase />, "Add Packages")}
-              {navItem("/dashboard/stories", <FaBookOpen />, "Manage Stories")}
+              {navItem(
+                "/dashboard/manage-stories",
+                <FaBookOpen />,
+                "Manage Stories"
+              )}
             </>
           )}
 
@@ -123,11 +145,28 @@ const DashboardLayout = () => {
           {role === "admin" && (
             <>
               {navItem("/dashboard/profile", <FaUser />, "Manage Profile")}
-              {navItem("/dashboard/assigned-tours", <FaMapMarkedAlt />, "My Assigned Tours")}
+              {navItem(
+                "/dashboard/assigned-tours",
+                <FaMapMarkedAlt />,
+                "My Assigned Tours"
+              )}
               {navItem("/dashboard/stories/add", <FaPlus />, "Add Stories")}
-              {navItem("/dashboard/stories", <FaBookOpen />, "Manage Stories")}
-              {navItem("/dashboard/admin", <FaUserShield />, "Admin Panel")}
-              {navItem("/dashboard/admin/manage-users", <FaUsers />, "Manage Users")}
+              {navItem(
+                "/dashboard/manage-stories",
+                <FaBookOpen />,
+                "Manage Stories"
+              )}
+              {navItem(
+                "/dashboard/admin/add-package",
+                <FaSuitcase />,
+                "Add Packages"
+              )}
+
+              {navItem(
+                "/dashboard/admin/manage-users",
+                <FaUsers />,
+                "Manage Users"
+              )}
             </>
           )}
         </nav>

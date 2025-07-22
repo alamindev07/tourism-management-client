@@ -18,7 +18,6 @@ import AdminPanel from '../pages/Dashboard/Admin/AdminPanel';
 import ManageUsers from '../pages/Dashboard/Admin/ManageUsers';
 
 import GuidePanel from '../pages/Dashboard/TourGuide/GuidePanel';
-import AddPackage from '../pages/Dashboard/TourGuide/AddPackage';
 
 import TouristPanel from '../pages/Dashboard/Tourist/TouristPanel';
 
@@ -26,6 +25,8 @@ import Unauthorized from '../pages/Unauthorized/Unauthorized';
 import DashboardRedirect from '../pages/Dashboard/DashboardRedirect';
 import AddStory from '../pages/Dashboard/Tourist/AddStory';
 import ManageStories from '../pages/Dashboard/Tourist/ManageStories';
+import ManageProfile from '../pages/Dashboard/Tourist/ManageProfile';
+import AddPackage from '../pages/Dashboard/Admin/AddPackage';
 
 const router = createBrowserRouter([
   {
@@ -67,6 +68,14 @@ const router = createBrowserRouter([
           </RoleBasedRoute>
         ),
       },
+       {
+        path: 'admin/add-package',
+        element: (
+          <RoleBasedRoute allowedRoles={['admin']}>
+            <AddPackage></AddPackage>
+          </RoleBasedRoute>
+        ),
+      },
 
       // Tour Guide Routes
       {
@@ -77,14 +86,7 @@ const router = createBrowserRouter([
           </RoleBasedRoute>
         ),
       },
-      {
-        path: 'guide/add-package', // ✅ fixed: removed `dashboard/` prefix
-        element: (
-          <RoleBasedRoute allowedRoles={['tourguide']}>
-            <AddPackage />
-          </RoleBasedRoute>
-        ),
-      },
+    
 
       // Tourist Route
       {
@@ -95,18 +97,28 @@ const router = createBrowserRouter([
           </RoleBasedRoute>
         ),
       },
+
+      // Shared Routes (Profile, Stories) — available for all roles
       {
-        path: 'stories/add', // ✅ fixed: removed `dashboard/` prefix
+        path: 'profile',
         element: (
-          <RoleBasedRoute allowedRoles={['tourist']}>
+          <RoleBasedRoute allowedRoles={['admin', 'tourguide', 'tourist']}>
+            <ManageProfile />
+          </RoleBasedRoute>
+        ),
+      },
+      {
+        path: 'stories/add',
+        element: (
+          <RoleBasedRoute allowedRoles={['admin', 'tourguide', 'tourist']}>
             <AddStory />
           </RoleBasedRoute>
         ),
       },
       {
-        path: 'manage-stories', // ✅ fixed: removed `dashboard/` prefix
+        path: 'manage-stories',
         element: (
-          <RoleBasedRoute allowedRoles={['tourist']}>
+          <RoleBasedRoute allowedRoles={['admin', 'tourguide', 'tourist']}>
             <ManageStories />
           </RoleBasedRoute>
         ),
