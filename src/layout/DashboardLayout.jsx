@@ -102,7 +102,7 @@ const DashboardLayout = () => {
             <>
               {navItem("/dashboard/profile", <FaUser />, "Manage Profile")}
               {navItem("/dashboard/bookings", <FaClipboardList />, "My Bookings")}
-              {navItem("/dashboard/stories", <FaBookOpen />, "Manage Stories")}
+              {navItem("/dashboard/manage-stories", <FaBookOpen />, "Manage Stories")}
               {navItem("/dashboard/stories/add", <FaPlus />, "Add Stories")}
               {navItem("/dashboard/join-guide", <FaRoute />, "Join as Tour Guide")}
             </>

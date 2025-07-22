@@ -1,14 +1,18 @@
+
+
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import useAuth from "../../../hooks/useAuth"; //  import your auth hook
 
 const imageUploadApiKey = import.meta.env.VITE_IMGBB_API_KEY;
 const imageUploadURL = `https://api.imgbb.com/1/upload?key=${imageUploadApiKey}`;
 
 const AddStory = () => {
+  const { user } = useAuth(); //  get the logged-in user
   const { register, handleSubmit, reset } = useForm();
   const [previewImages, setPreviewImages] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -35,8 +39,6 @@ const AddStory = () => {
         });
 
         const result = await res.json();
-        console.log("Image Upload Result:", result); // Debug log
-
         if (result.success) {
           uploadedImageUrls.push(result.data.url);
         } else {
@@ -76,6 +78,9 @@ const AddStory = () => {
         description: data.description,
         images: imageUrls,
         date: new Date(),
+        userEmail: user?.email,         
+        userName: user?.displayName,     
+        userPhoto: user?.photoURL       
       };
 
       await axiosSecure.post("/api/stories", story);

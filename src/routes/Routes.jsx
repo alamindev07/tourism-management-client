@@ -25,6 +25,7 @@ import TouristPanel from '../pages/Dashboard/Tourist/TouristPanel';
 import Unauthorized from '../pages/Unauthorized/Unauthorized';
 import DashboardRedirect from '../pages/Dashboard/DashboardRedirect';
 import AddStory from '../pages/Dashboard/Tourist/AddStory';
+import ManageStories from '../pages/Dashboard/Tourist/ManageStories';
 
 const router = createBrowserRouter([
   {
@@ -99,6 +100,14 @@ const router = createBrowserRouter([
         element: (
           <RoleBasedRoute allowedRoles={['tourist']}>
             <AddStory />
+          </RoleBasedRoute>
+        ),
+      },
+      {
+        path: 'manage-stories', // ✅ fixed: removed `dashboard/` prefix
+        element: (
+          <RoleBasedRoute allowedRoles={['tourist']}>
+            <ManageStories />
           </RoleBasedRoute>
         ),
       },
