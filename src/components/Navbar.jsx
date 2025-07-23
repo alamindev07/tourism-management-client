@@ -90,22 +90,7 @@ const Navbar = () => {
                   <FaUserCircle className="text-3xl text-slate-500" />
                 )}
               </div>
-              {/* <ul
-                tabIndex={0}
-                className="dropdown-content menu menu-sm mt-3 p-2 shadow bg-white rounded-box w-64"
-              >
-                <li className="text-sm font-semibold px-3 text-gray-700">{displayName}</li>
-                <li className="text-xs px-3 text-gray-500 truncate">{email}</li>
-                <li>
-                  <Link to="/dashboard">Dashboard</Link>
-                </li>
-                <li>
-                  <Link to="/offers">Offer Announcements</Link>
-                </li>
-                <li>
-                  <button className="btn btn-sm btn-error" onClick={handleLogout}>Logout</button>
-                </li>
-              </ul> */}
+             
 
                <ul
       tabIndex={0}
