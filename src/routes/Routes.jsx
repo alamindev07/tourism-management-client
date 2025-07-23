@@ -9,7 +9,6 @@ import RoleBasedRoute from './RoleBasedRoute';
 
 import Home from '../pages/Home/Home';
 import About from '../pages/About/AboutUs';
-import Trips from '../pages/Trips/Trips';
 import Community from '../pages/Community/CommunityPage';
 import Login from '../pages/Login/Login';
 import Register from '../pages/Register/Register';
@@ -29,6 +28,8 @@ import ManageProfile from '../pages/Dashboard/Tourist/ManageProfile';
 import AddPackage from '../pages/Dashboard/Admin/AddPackage';
 import JoinAsGuide from '../pages/Dashboard/Tourist/JoinAsGuide';
 import ManageCandidates from '../pages/Dashboard/Admin/ManageCandidates ';
+import AllTripsPage from '../pages/Trips/AllTripsPage';
+import PackageDetailsPage from '../pages/PackageDetails/PackageDetailsPage';
 
 const router = createBrowserRouter([
   {
@@ -37,7 +38,8 @@ const router = createBrowserRouter([
     children: [
       { path: '/', element: <Home /> },
       { path: '/about', element: <About /> },
-      { path: '/trips', element: <Trips /> },
+      { path: '/Alltrips', element: <AllTripsPage /> },
+       { path: '/packages/:id', element: <PackageDetailsPage /> },  // <-- Add this line
       { path: '/community', element: <Community /> },
       { path: '/login', element: <Login /> },
       { path: '/register', element: <Register /> },
