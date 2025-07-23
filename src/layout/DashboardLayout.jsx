@@ -70,9 +70,11 @@ const DashboardLayout = () => {
         } md:block`}
       >
         <div className="mb-6">
-          <h2 className="text-2xl font-extrabold text-slate-800">
-            Tourism Admin
-          </h2>
+         <h2 className="text-2xl md:text-3xl font-extrabold text-center md:text-left text-slate-800">
+  <span className="text-green-600 animate-pulse">Dashboard Role As</span>{" "}
+  <span className="text-pink-600 typing-animation block mt-1">{role || "Anonymous"}</span>
+</h2>
+
           {user && (
             <div className="mt-4 flex items-center gap-3 text-slate-700">
               <img
@@ -163,9 +165,14 @@ const DashboardLayout = () => {
               )}
 
               {navItem(
+                "/dashboard/admin/manage-candidates",
+                <FaUsers />,
+                "Manage Candidates"
+              )}
+              {navItem(
                 "/dashboard/admin/manage-users",
                 <FaUsers />,
-                "Manage Users"
+                "Manage All Users"
               )}
             </>
           )}

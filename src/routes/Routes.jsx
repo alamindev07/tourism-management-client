@@ -27,6 +27,8 @@ import AddStory from '../pages/Dashboard/Tourist/AddStory';
 import ManageStories from '../pages/Dashboard/Tourist/ManageStories';
 import ManageProfile from '../pages/Dashboard/Tourist/ManageProfile';
 import AddPackage from '../pages/Dashboard/Admin/AddPackage';
+import JoinAsGuide from '../pages/Dashboard/Tourist/JoinAsGuide';
+import ManageCandidates from '../pages/Dashboard/Admin/ManageCandidates ';
 
 const router = createBrowserRouter([
   {
@@ -57,6 +59,14 @@ const router = createBrowserRouter([
         element: (
           <RoleBasedRoute allowedRoles={['admin']}>
             <AdminPanel />
+          </RoleBasedRoute>
+        ),
+      },
+      {
+        path: 'admin/manage-candidates',
+        element: (
+          <RoleBasedRoute allowedRoles={['admin']}>
+            <ManageCandidates />
           </RoleBasedRoute>
         ),
       },
@@ -97,6 +107,14 @@ const router = createBrowserRouter([
           </RoleBasedRoute>
         ),
       },
+      {
+        path: 'join-guide',
+        element: (
+          <RoleBasedRoute allowedRoles={['admin', 'tourguide', 'tourist']}>
+            <JoinAsGuide />
+          </RoleBasedRoute>
+        ),
+      },
 
       // Shared Routes (Profile, Stories) — available for all roles
       {
@@ -123,6 +141,7 @@ const router = createBrowserRouter([
           </RoleBasedRoute>
         ),
       },
+      
     ],
   },
   {
