@@ -7,6 +7,7 @@ import OverviewSection from '../../components/HomSections/OverviewSection';
 import Banner from '../../components/HomSections/Banner';
 import PackagesSection from './PackagesSection';
 import TourismGuideSection from './TourismGuideSection';
+import TouristStorySection from '../../components/HomSections/TouristStorySection';
 // import PackagesSection from './PackagesSection';
 
 const Home = () => {
@@ -18,7 +19,8 @@ const Home = () => {
       <OverviewSection />
     {/* === package Section === */}
    <TourismGuideSection></TourismGuideSection>
-
+{/* === Tourist Story Section === */}
+      <TouristStorySection />
 
     </div>
   );
