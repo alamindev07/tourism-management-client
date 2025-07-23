@@ -8,7 +8,7 @@ import PrivateRoute from '../auth/PrivateRoute';
 import RoleBasedRoute from './RoleBasedRoute';
 
 import Home from '../pages/Home/Home';
-import About from '../pages/About/About';
+import About from '../pages/About/AboutUs';
 import Trips from '../pages/Trips/Trips';
 import Community from '../pages/Community/CommunityPage';
 import Login from '../pages/Login/Login';
