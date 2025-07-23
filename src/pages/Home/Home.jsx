@@ -8,6 +8,8 @@ import Banner from '../../components/HomSections/Banner';
 import PackagesSection from './PackagesSection';
 import TourismGuideSection from './TourismGuideSection';
 import TouristStorySection from '../../components/HomSections/TouristStorySection';
+import PopularDestinationsSection from '../../components/HomSections/PopularDestinationsSection';
+import WhyChooseUsSection from '../../components/HomSections/WhyChooseUsSection';
 // import PackagesSection from './PackagesSection';
 
 const Home = () => {
@@ -21,6 +23,10 @@ const Home = () => {
    <TourismGuideSection></TourismGuideSection>
 {/* === Tourist Story Section === */}
       <TouristStorySection />
+{/* === extra section Section === */}
+          <PopularDestinationsSection />
+{/* === extra section Section === */}
+      <WhyChooseUsSection />
 
     </div>
   );
