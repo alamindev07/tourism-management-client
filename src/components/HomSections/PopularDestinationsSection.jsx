@@ -1,6 +1,9 @@
 
-import { useEffect, useState, useRef } from "react";
+
+// src/components/PopularDestinationsSection.jsx
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 function shuffleArray(array) {
@@ -13,26 +16,29 @@ function shuffleArray(array) {
 }
 
 const PopularDestinationsSection = () => {
-  const [allDestinations, setAllDestinations] = useState([]);
-  const [displayed, setDisplayed] = useState([]);
-  const [loading, setLoading] = useState(true);
   const axiosSecure = useAxiosSecure();
   const intervalRef = useRef(null);
+  const [displayed, setDisplayed] = useState([]);
 
+  // Query data using React Query (fetches once)
+  const { data: allDestinations = [], isLoading } = useQuery({
+    queryKey: ["popular-packages"],
+    queryFn: () =>
+      axiosSecure.get("/api/packages/popular").then((res) => res.data),
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchInterval: false,
+  });
+
+  // Set initial 4 items once data is loaded
   useEffect(() => {
-    axiosSecure
-      .get("/api/packages/popular")
-      .then((res) => {
-        setAllDestinations(res.data);
-        setDisplayed(res.data.slice(0, 4));
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, [axiosSecure]);
+    if (allDestinations.length > 0) {
+      const shuffled = shuffleArray(allDestinations).slice(0, 4);
+      setDisplayed(shuffled);
+    }
+  }, [allDestinations]);
 
+  //  Cycle through cards every 5 seconds
   useEffect(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
 
@@ -52,7 +58,7 @@ const PopularDestinationsSection = () => {
           );
           return newSelection;
         });
-      }, 4000);
+      }, 5000); 
     }
 
     return () => clearInterval(intervalRef.current);
@@ -70,7 +76,7 @@ const PopularDestinationsSection = () => {
   };
 
   return (
-    <div className="px-4 md:px-10 lg:px-20 py-14 bg-gray-50">
+    <div className="px-4 md:px-10 lg:px-20 py-6 bg-gray-50">
       <motion.h2
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -80,14 +86,14 @@ const PopularDestinationsSection = () => {
         Popular Destinations
       </motion.h2>
 
-      {loading ? (
+      {isLoading ? (
         <div className="flex justify-center items-center min-h-[200px]">
           <span className="loading loading-spinner loading-lg text-primary"></span>
         </div>
       ) : (
         <AnimatePresence mode="wait">
           <motion.div
-            key={JSON.stringify(displayed.map((d) => d._id))}
+            key={displayed.map((d) => d._id).join(",")}
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -109,7 +115,6 @@ const PopularDestinationsSection = () => {
                   alt={item.title}
                   className="w-36 h-36 object-cover rounded-full mx-auto mt-6"
                 />
-
                 <div className="p-6 flex flex-col flex-grow">
                   <h3 className="font-semibold text-xl text-gray-900 mb-4 text-center">
                     {item.title}
@@ -117,7 +122,6 @@ const PopularDestinationsSection = () => {
                   <p className="text-gray-600 text-sm line-clamp-3 mb-6 text-center">
                     {item.description}
                   </p>
-
                   <div className="flex justify-center gap-6 mt-auto">
                     <span className="bg-purple-200 text-purple-800 font-semibold px-4 py-2 rounded-full shadow-md text-sm select-none">
                       💰 {item.price.toLocaleString()} BDT
@@ -137,4 +141,3 @@ const PopularDestinationsSection = () => {
 };
 
 export default PopularDestinationsSection;
-

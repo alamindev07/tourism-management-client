@@ -1,3 +1,4 @@
+
 import { useContext, useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -7,47 +8,60 @@ import { AuthContext } from "../../context/AuthProvider";
 import Lottie from "lottie-react";
 import { saveUserToDB } from "../../api/saveUserToDB";
 
-
 const Login = () => {
   const { login, signInWithGoogle, resetPassword } = useContext(AuthContext);
   const [error, setError] = useState("");
   const [emailForReset, setEmailForReset] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname || location.state?.shareUrl || "/";
+// console.log("Login location.state:", location.state);
+
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
+
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
 
     setEmailForReset(email);
+    toast.loading("Logging in...");
 
     try {
       const result = await login(email, password);
       const user = result.user;
 
       try {
-        // Save user to DB with default role
         await saveUserToDB(user);
       } catch (saveErr) {
         console.error("Failed to save user after login:", saveErr);
-        // Optional: toast.error("Failed to save user info to database");
       }
 
+      toast.dismiss(); // dismiss loading toast
       toast.success("Login successful!");
       navigate(from, { replace: true });
     } catch (err) {
+      toast.dismiss();
       console.error("Login error:", err);
       setError("Invalid email or password");
       toast.error("Login failed");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleGoogleLogin = async () => {
     setError("");
+    setIsGoogleLoading(true);
+    toast.loading("Logging in with Google...");
+
     try {
       const result = await signInWithGoogle();
       const user = result.user;
@@ -56,15 +70,18 @@ const Login = () => {
         await saveUserToDB(user);
       } catch (saveErr) {
         console.error("Failed to save Google user:", saveErr);
-        // Optional: toast.error("Failed to save user info to database");
       }
 
+      toast.dismiss();
       toast.success("Logged in with Google!");
       navigate(from, { replace: true });
     } catch (err) {
+      toast.dismiss();
       console.error("Google login error:", err);
       setError("Google sign-in failed.");
       toast.error("Google sign-in failed.");
+    } finally {
+      setIsGoogleLoading(false);
     }
   };
 
@@ -115,7 +132,6 @@ const Login = () => {
               />
             </div>
 
-            {/* Forgot Password */}
             <div className="text-right">
               <button
                 type="button"
@@ -130,9 +146,10 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full mt-2 bg-slate-700 text-white py-2 rounded-lg hover:bg-slate-800 transition duration-300"
+              disabled={isLoading}
+              className="w-full mt-2 bg-slate-700 text-white py-2 rounded-lg hover:bg-slate-800 transition duration-300 disabled:opacity-70 cursor-pointer"
             >
-              Login
+              {isLoading ? "Logging in..." : "Login"}
             </button>
           </form>
 
@@ -146,10 +163,13 @@ const Login = () => {
           {/* Google Sign-in */}
           <button
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center gap-2 border border-slate-400 py-2 rounded-lg hover:bg-slate-100 transition"
+            disabled={isGoogleLoading}
+            className="w-full flex items-center justify-center gap-2 border border-slate-400 py-2 rounded-lg hover:bg-slate-100 transition disabled:opacity-70 cursor-pointer"
           >
             <FcGoogle className="text-xl" />
-            <span className="text-slate-700 font-medium">Continue with Google</span>
+            <span className="text-slate-700 font-medium">
+              {isGoogleLoading ? "Signing in..." : "Continue with Google"}
+            </span>
           </button>
 
           <p className="text-sm mt-4 text-slate-600">

@@ -1,10 +1,10 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react'; 
 import { FacebookShareButton, FacebookIcon } from 'react-share';
-import { Link, useNavigate } from 'react-router-dom';
-import useAuth from '../../hooks/useAuth';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import { format } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
+import useAuth from '../../hooks/useAuth';
 
 const TouristStorySection = () => {
   const [stories, setStories] = useState([]);
@@ -12,6 +12,7 @@ const TouristStorySection = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const intervalRef = useRef(null);
 
   const fetchStories = async () => {
@@ -32,24 +33,6 @@ const TouristStorySection = () => {
     return () => clearInterval(intervalRef.current);
   }, []);
 
-  const handleShareClick = (e) => {
-    if (!user) {
-      e.preventDefault();
-      navigate('/login');
-    }
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -30 },
-  };
-
   return (
     <div className="px-4 md:px-10 lg:px-20 py-14 bg-gradient-to-b from-[#f9fbff] to-[#edf3fa]">
       <motion.h2
@@ -67,7 +50,10 @@ const TouristStorySection = () => {
         </div>
       ) : (
         <motion.div
-          variants={containerVariants}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
+          }}
           initial="hidden"
           animate="visible"
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
@@ -76,7 +62,11 @@ const TouristStorySection = () => {
             {stories.map((story) => (
               <motion.div
                 key={story._id}
-                variants={cardVariants}
+                variants={{
+                  hidden: { opacity: 0, y: 30 },
+                  visible: { opacity: 1, y: 0 },
+                  exit: { opacity: 0, y: -30 },
+                }}
                 initial="hidden"
                 animate="visible"
                 exit="exit"
@@ -107,13 +97,27 @@ const TouristStorySection = () => {
                   </div>
 
                   <div className="flex justify-center mt-4">
-                    <FacebookShareButton
-                      url={`${window.location.origin}/story/${story._id}`}
-                      quote={story.title}
-                      onClick={handleShareClick}
-                    >
-                      <FacebookIcon size={32} round />
-                    </FacebookShareButton>
+                    {user ? (
+                      <FacebookShareButton
+                        url={`${window.location.origin}/story/${story._id}`}
+                        quote={story.title}
+                      >
+                        <FacebookIcon size={32} round />
+                      </FacebookShareButton>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          navigate('/login', {
+                            state: { from: location.pathname },
+                          })
+                        }
+                        className="cursor-pointer"
+                        aria-label="Login to share on Facebook"
+                      >
+                        <FacebookIcon size={32} round />
+                      </button>
+                    )}
                   </div>
                 </div>
               </motion.div>

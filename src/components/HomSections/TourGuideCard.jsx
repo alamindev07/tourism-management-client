@@ -14,12 +14,15 @@ const TourGuideCard = ({ guide }) => {
         <p className="text-sm text-center text-gray-500 dark:text-gray-300">{guide.email}</p>
 
         <Link
-          to={`/guide-details/${guide._id}`}
+          to={`/dashboard/guide/profile/${guide._id}`}
           className="mt-5 inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full border border-purple-500 text-purple-700 hover:bg-purple-600 hover:text-white transition-all duration-300 font-medium shadow-sm"
         >
           <FaUserCircle className="text-lg" />
           View Profile
         </Link>
+
+
+
       </div>
     </div>
   );

@@ -1,19 +1,20 @@
 
-
-// PackagesSection.jsx
-import React from 'react';
 import { useRandomPackages } from '../../services/packageService';
 import { motion } from 'framer-motion';
 import { FaMapMarkerAlt, FaClock } from 'react-icons/fa';
 import { TbCoinTakaFilled } from 'react-icons/tb';
+import { Link,  } from 'react-router-dom';
+
 
 const PackagesSection = () => {
+ 
   const { data: packages = [], isLoading, isError } = useRandomPackages();
 
   if (isLoading)
     return <div className="text-center py-10 text-lg font-medium text-blue-600">Loading Packages...</div>;
   if (isError)
     return <div className="text-center py-10 text-red-500 font-semibold">Error loading packages.</div>;
+
 
   return (
     <section className="px-4 py-10 max-w-7xl mx-auto">
@@ -60,9 +61,16 @@ const PackagesSection = () => {
               </div>
 
               <div className="text-right">
-                <button className="btn bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:from-indigo-600 hover:to-purple-500 mt-4 btn-sm rounded-full px-5 shadow-lg">
-                  View Details
-                </button>
+                <Link
+                                  to={`/packages/${pkg._id}`}
+                                  className="inline-block bg-gradient-to-r from-purple-500 to-indigo-600 text-white
+                                  hover:from-indigo-600 hover:to-purple-500 mt-4 btn-sm rounded-full px-5 py-2 shadow-lg
+                                  transition-colors duration-300"
+                                >
+                                  View Details
+                                </Link>
+
+                
               </div>
             </div>
           </motion.div>
@@ -73,3 +81,5 @@ const PackagesSection = () => {
 };
 
 export default PackagesSection;
+
+

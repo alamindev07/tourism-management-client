@@ -1,12 +1,21 @@
-import { useState } from "react";
+
+
+// export default CommunityPage;
+import { useState, useContext } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { FacebookShareButton, FacebookIcon } from "react-share";
+import { FacebookIcon } from "react-share";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { FaUserCircle, FaCalendarAlt, FaSearch } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useNavigate, useLocation } from "react-router-dom";
+import { AuthContext } from "../../context/AuthProvider";
+import toast from "react-hot-toast";
 
 const CommunityPage = () => {
   const axiosSecure = useAxiosSecure();
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
 
   const { data: stories = [], isLoading } = useQuery({
@@ -20,11 +29,30 @@ const CommunityPage = () => {
   if (isLoading)
     return <div className="text-center py-20 text-gray-600 text-xl">Loading stories...</div>;
 
-  // Filter stories by search term
-  const filteredStories = stories.filter((story) =>
-    story.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    story.userName.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredStories = stories.filter(
+    (story) =>
+      story.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      story.userName.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Custom share handler to check login before sharing
+  const handleFacebookShareClick = (story) => {
+    if (!user) {
+      // Save intended share action in state and redirect to login
+      toast("Please login to share this story.");
+      navigate("/login", {
+        state: { from: location.pathname, shareStoryId: story._id },
+      });
+    } else {
+      // User logged in, open share window manually
+      const shareUrl = `${window.location.origin}/community`;
+      const shareText = story.title;
+      const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        shareUrl
+      )}&quote=${encodeURIComponent(shareText)}&hashtag=%23CommunityStory`;
+      window.open(facebookShareUrl, "fbshare", "width=600,height=400");
+    }
+  };
 
   return (
     <section className="px-4 md:px-10 lg:px-20 py-14 bg-gray-50 min-h-screen">
@@ -63,9 +91,7 @@ const CommunityPage = () => {
                 <h3 className="font-bold text-xl mb-2 text-gray-900 line-clamp-1">
                   {story.title}
                 </h3>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                  {story.description}
-                </p>
+                <p className="text-gray-600 text-sm mb-4 line-clamp-3">{story.description}</p>
 
                 <div className="flex items-center gap-3 mb-4">
                   {story.userPhoto ? (
@@ -82,21 +108,17 @@ const CommunityPage = () => {
 
                 <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
                   <span className="flex items-center gap-1">
-                    <FaCalendarAlt />{" "}
-                    {new Date(story.createdAt).toLocaleDateString()}
+                    <FaCalendarAlt /> {new Date(story.createdAt).toLocaleDateString()}
                   </span>
 
-                  <FacebookShareButton
-                    url={`${window.location.origin}/community`}
-                    quote={story.title}
-                    hashtag="#CommunityStory"
-                    className="flex items-center gap-2"
+                  <button
+                    onClick={() => handleFacebookShareClick(story)}
+                    className=" flex items-center gap-2 text-blue-600 font-semibold hover:underline cursor-pointer"
+                    type="button"
                   >
                     <FacebookIcon size={32} round />
-                    <span className="hidden md:inline text-blue-600 font-semibold">
-                      Share
-                    </span>
-                  </FacebookShareButton>
+                    <span className="hidden md:inline">Share</span>
+                  </button>
                 </div>
               </div>
             </motion.div>

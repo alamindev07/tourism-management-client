@@ -1,9 +1,38 @@
+/* @import "tailwindcss";
+@plugin "daisyui"; */
+
+
 @import "tailwindcss";
 @plugin "daisyui";
 
+@layer utilities {
+  .text-gradient-blue {
+    background: linear-gradient(90deg, #3b82f6, #06b6d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient-pink {
+    background: linear-gradient(90deg, #ec4899, #f43f5e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient-text {
+    background: linear-gradient(90deg, #334155, #64748b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+   .text-gradient-purple {
+    background: linear-gradient(to right, #7d1a13ef, #06b6d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
 
 
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */
+
+
+
+
 

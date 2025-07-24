@@ -30,6 +30,7 @@ import JoinAsGuide from '../pages/Dashboard/Tourist/JoinAsGuide';
 import ManageCandidates from '../pages/Dashboard/Admin/ManageCandidates ';
 import AllTripsPage from '../pages/Trips/AllTripsPage';
 import PackageDetailsPage from '../pages/PackageDetails/PackageDetailsPage';
+import TourGuideProfile from '../pages/Dashboard/TourGuide/TourGuideProfile';
 
 const router = createBrowserRouter([
   {
@@ -39,7 +40,7 @@ const router = createBrowserRouter([
       { path: '/', element: <Home /> },
       { path: '/about', element: <About /> },
       { path: '/Alltrips', element: <AllTripsPage /> },
-       { path: '/packages/:id', element: <PackageDetailsPage /> },  // <-- Add this line
+       { path: '/packages/:id', element: <PrivateRoute><PackageDetailsPage /></PrivateRoute> },  // <-- Add this line
       { path: '/community', element: <Community /> },
       { path: '/login', element: <Login /> },
       { path: '/register', element: <Register /> },
@@ -143,6 +144,15 @@ const router = createBrowserRouter([
           </RoleBasedRoute>
         ),
       },
+      {
+  path: 'guide/profile/:id',
+  element: (
+    <RoleBasedRoute allowedRoles={['admin', 'tourguide', 'tourist']}>
+      <TourGuideProfile />
+    </RoleBasedRoute>
+  ),
+},
+
       
     ],
   },

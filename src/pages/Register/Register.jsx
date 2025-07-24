@@ -1,9 +1,6 @@
 
-
-
-
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Lottie from "lottie-react";
 import { FcGoogle } from "react-icons/fc";
 import { AuthContext } from "../../context/AuthProvider";
@@ -15,46 +12,64 @@ import { saveUserToDB } from "../../api/saveUserToDB";
 const Register = () => {
   const { createUser, updateUserProfile, signInWithGoogle } = useContext(AuthContext);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Where to redirect after registration (default "/")
+  // const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname || location.state?.shareUrl || "/";
 
   const handleRegister = async (e) => {
-  e.preventDefault();
-  const form = e.target;
-  const name = form.name.value.trim();
-  const photo = form.photo.value.trim();
-  const email = form.email.value.trim();
-  const password = form.password.value;
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
 
-  setError("");
+    const form = e.target;
+    const name = form.name.value.trim();
+    const photo = form.photo.value.trim();
+    const email = form.email.value.trim();
+    const password = form.password.value;
 
-  try {
-    const result = await createUser(email, password);
+    toast.loading("Registering user...");
 
-    // ⏳ Important: wait until Firebase profile is updated
-    await updateUserProfile(name, photo);
+    try {
+      const result = await createUser(email, password);
 
-    // ✅ Save using form values directly
-    const userToSave = {
-      uid: result.user.uid,
-      name,
-      email,
-      photoURL: photo || null,
-      role: "tourist",
-    };
-console.log("🛠 Calling saveUserToDB...");
-    await saveUserToDB(userToSave);
-    toast.success("User registration successful!");
-    form.reset();
-    navigate("/");
-  } catch (err) {
-    console.error("Register error:", err);
-    setError(err.message || "Registration failed.");
-  }
-};
+      // Wait for profile update
+      await updateUserProfile(name, photo);
+
+      const userToSave = {
+        uid: result.user.uid,
+        name,
+        email,
+        photoURL: photo || null,
+        role: "tourist",
+      };
+
+      await saveUserToDB(userToSave);
+
+      toast.dismiss();
+      toast.success("User registration successful!");
+      form.reset();
+      navigate(from, { replace: true });
+    } catch (err) {
+      toast.dismiss();
+      console.error("Register error:", err);
+      setError(err.message || "Registration failed.");
+      toast.error(err.message || "Registration failed.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleGoogleSignIn = async () => {
     setError("");
+    setIsGoogleLoading(true);
+    toast.loading("Signing in with Google...");
+
     try {
       const result = await signInWithGoogle();
       const user = result.user;
@@ -68,11 +83,16 @@ console.log("🛠 Calling saveUserToDB...");
       };
 
       await saveUserToDB(userToSave);
+      toast.dismiss();
       toast.success("Registered with Google successfully!");
-      navigate("/");
+      navigate(from, { replace: true });
     } catch (err) {
-      console.error("❌ Google sign-in error:", err);
+      toast.dismiss();
+      console.error("Google sign-in error:", err);
       setError(err.message || "Google sign-in failed.");
+      toast.error(err.message || "Google sign-in failed.");
+    } finally {
+      setIsGoogleLoading(false);
     }
   };
 
@@ -95,6 +115,7 @@ console.log("🛠 Calling saveUserToDB...");
                 name="name"
                 required
                 className="w-full px-4 py-2 rounded-lg bg-slate-100 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-500"
+                disabled={isLoading || isGoogleLoading}
               />
             </div>
             <div>
@@ -104,6 +125,7 @@ console.log("🛠 Calling saveUserToDB...");
                 name="email"
                 required
                 className="w-full px-4 py-2 rounded-lg bg-slate-100 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-500"
+                disabled={isLoading || isGoogleLoading}
               />
             </div>
             <div>
@@ -112,6 +134,7 @@ console.log("🛠 Calling saveUserToDB...");
                 type="text"
                 name="photo"
                 className="w-full px-4 py-2 rounded-lg bg-slate-100 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-500"
+                disabled={isLoading || isGoogleLoading}
               />
             </div>
             <div>
@@ -121,6 +144,7 @@ console.log("🛠 Calling saveUserToDB...");
                 name="password"
                 required
                 className="w-full px-4 py-2 rounded-lg bg-slate-100 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-500"
+                disabled={isLoading || isGoogleLoading}
               />
             </div>
 
@@ -128,9 +152,10 @@ console.log("🛠 Calling saveUserToDB...");
 
             <button
               type="submit"
-              className="w-full mt-4 bg-slate-700 text-white py-2 rounded-lg hover:bg-slate-800 transition duration-300"
+              disabled={isLoading || isGoogleLoading}
+              className="w-full mt-4 bg-slate-700 text-white py-2 rounded-lg hover:bg-slate-800 transition duration-300 disabled:opacity-70 cursor-pointer"
             >
-              Register
+              {isLoading ? "Registering..." : "Register"}
             </button>
           </form>
 
@@ -144,10 +169,13 @@ console.log("🛠 Calling saveUserToDB...");
           {/* Google Sign-In Button */}
           <button
             onClick={handleGoogleSignIn}
-            className="w-full flex items-center justify-center gap-2 border border-slate-400 py-2 rounded-lg hover:bg-slate-100 transition"
+            disabled={isLoading || isGoogleLoading}
+            className="w-full flex items-center justify-center gap-2 border border-slate-400 py-2 rounded-lg hover:bg-slate-100 transition disabled:opacity-70 cursor-pointer"
           >
             <FcGoogle className="text-xl" />
-            <span className="text-slate-700 font-medium">Continue with Google</span>
+            <span className="text-slate-700 font-medium">
+              {isGoogleLoading ? "Signing in..." : "Continue with Google"}
+            </span>
           </button>
 
           <p className="text-sm mt-4 text-slate-600">
