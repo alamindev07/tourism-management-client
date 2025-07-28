@@ -133,7 +133,7 @@ const DashboardLayout = () => {
             <>
               {navItem("/dashboard/profile", <FaUser />, "Manage Profile")}
               {navItem(
-                "/dashboard/assigned-tours",
+                "/dashboard/assignedTours",
                 <FaMapMarkedAlt />,
                 "My Assigned Tours"
               )}

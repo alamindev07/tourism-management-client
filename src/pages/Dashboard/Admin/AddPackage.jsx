@@ -1,9 +1,6 @@
 
-
-
 import React from "react";
 import { useForm } from "react-hook-form";
-// import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { motion } from "framer-motion";
@@ -62,11 +59,11 @@ const AddPackage = () => {
           </div>
 
           <div>
-            <label className="label font-semibold text-sky-700">Price (BDT)</label>
+            <label className="label font-semibold text-sky-700">Price ($)</label>
             <input
               type="number"
               {...register("price")}
-              placeholder="Price"
+              placeholder="Price in dollars"
               className="input input-bordered w-full focus:ring focus:ring-sky-300"
               required
             />

@@ -184,7 +184,7 @@ if (alreadyBooked) {
           </div>
           <div>
             <label className="label-text">Price</label>
-            <input type="text" value={`${pkg?.price || ""} Taka`} readOnly className="input input-bordered w-full bg-gray-100" />
+            <input type="text" value={`$${pkg?.price || ""} `} readOnly className="input input-bordered w-full bg-gray-100" />
           </div>
           <div>
             <label className="label-text">Select Date</label>

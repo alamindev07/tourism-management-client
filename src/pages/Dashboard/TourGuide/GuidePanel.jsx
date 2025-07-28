@@ -1,4 +1,3 @@
-// src/pages/Dashboard/TourGuide/GuidePanel.jsx
 import { motion } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
 import { Link } from 'react-router-dom';

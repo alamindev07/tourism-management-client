@@ -8,14 +8,16 @@ import {
   FaTrashAlt,
   FaCalendarAlt,
   FaCheckCircle,
+  FaTimesCircle,
+  FaHourglassHalf,
 } from "react-icons/fa";
-import { FaBangladeshiTakaSign } from "react-icons/fa6";
+import { CiBadgeDollar } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import NoBookingsSection from "./NoBookingsSection";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Confetti from "react-confetti";
 
-// Unique bottom border colors
+// border‑color 
 const borderColors = [
   "border-b-4 border-pink-400",
   "border-b-4 border-blue-400",
@@ -25,13 +27,38 @@ const borderColors = [
   "border-b-4 border-indigo-400",
 ];
 
-const MyBookings = () => {
+const STATUS_MAP = {
+  in_review: {
+    label: "In Review",
+    icon: FaHourglassHalf,
+    color: "text-yellow-500",
+  },
+  accepted: {
+    label: "Accepted",
+    icon: FaCheckCircle,
+    color: "text-green-500",
+  },
+  rejected: {
+    label: "Rejected",
+    icon: FaTimesCircle,
+    color: "text-red-500",
+  },
+  pending: {
+    // if you still use “pending” before payment
+    label: "Pending",
+    icon: FaHourglassHalf,
+    color: "text-gray-500",
+  },
+};
+
+export default function MyBookings() {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
   const [cancelingId, setCancelingId] = useState(null);
   const [showConfetti, setShowConfetti] = useState(false);
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   const {
     data: bookings = [],
@@ -49,9 +76,10 @@ const MyBookings = () => {
     refetchOnWindowFocus: true,
   });
 
+  //  Confetti every 3 accepted bookings
   useEffect(() => {
-    const confirmedCount = bookings.filter((b) => b.status === "confirmed").length;
-    if (confirmedCount > 0 && confirmedCount % 3 === 0) {
+    const acceptedCount = bookings.filter(b => b.status === "accepted").length;
+    if (acceptedCount > 0 && acceptedCount % 3 === 0) {
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 6000);
     }
@@ -67,37 +95,34 @@ const MyBookings = () => {
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, cancel it!",
     });
+    if (!result.isConfirmed) return;
 
-    if (result.isConfirmed) {
-      setCancelingId(id);
-      try {
-        await queryClient.invalidateQueries({
-          queryKey: ["myBookings", user.email],
-          refetchType: "active",
-        });
-        await axiosSecure.delete(`/api/bookings/${id}`);
-        await refetch();
-        Swal.fire("Cancelled!", "Your booking has been cancelled.", "success");
-      } catch (error) {
-        console.error("Cancel error:", error);
-        Swal.fire("Error!", "Failed to cancel booking.", "error");
-      } finally {
-        setCancelingId(null);
-      }
+    setCancelingId(id);
+    try {
+      await axiosSecure.delete(`/api/bookings/${id}`);
+      await queryClient.invalidateQueries(["myBookings", user.email]);
+      await refetch();
+      Swal.fire("Cancelled!", "Your booking has been cancelled.", "success");
+    } catch (err) {
+      console.error(err);
+      Swal.fire("Error", "Could not cancel booking.", "error");
+    } finally {
+      setCancelingId(null);
     }
   };
 
+
   const handlePayNow = (booking) => {
-    navigate(`/dashboard/payment/${booking._id}`, { state: { booking } });
-  };
+  navigate(`/dashboard/payment/${booking._id}`, { state: { booking } });
+};
+
 
   if (isLoading) return <p className="text-center py-10">Loading bookings...</p>;
-  if (isError) return <p className="text-center text-red-500 py-10">Error loading bookings.</p>;
+  if (isError)  return <p className="text-center text-red-500 py-10">Error loading bookings.</p>;
 
   return (
     <div className="p-4 sm:p-6">
       {showConfetti && <Confetti />}
-
       <h2 className="text-4xl font-extrabold mb-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-cyan-500">
         My Bookings
       </h2>
@@ -112,6 +137,7 @@ const MyBookings = () => {
                 <th>#</th>
                 <th>Image</th>
                 <th>Package</th>
+                <th>Tour Guide</th>
                 <th>Date</th>
                 <th>Price</th>
                 <th>Status</th>
@@ -119,67 +145,104 @@ const MyBookings = () => {
               </tr>
             </thead>
             <tbody>
-              {bookings.map((booking, index) => (
-                <tr
-                  key={booking._id}
-                  className={`transition-all hover:bg-blue-50 ${
-                    borderColors[index % borderColors.length]
-                  }`}
-                >
-                  <td className="py-3 font-semibold">{index + 1}</td>
-                  <td>
-                    <motion.img
-                      whileHover={{ scale: 1.1 }}
-                      src={booking.packageImage}
-                      alt={booking.packageTitle}
-                      className="w-16 h-16 rounded-full object-cover mx-auto border-2 border-gray-300 shadow"
-                    />
-                  </td>
-                  <td className="font-medium text-blue-700">{booking.packageTitle}</td>
-                  <td>
-                    <p className="flex justify-center items-center gap-2 text-gray-600">
-                      <FaCalendarAlt className="text-blue-500" />
-                      {new Date(booking.tourDate).toLocaleDateString()}
-                    </p>
-                  </td>
-                  <td>
-                    <span className="flex items-center justify-center gap-1 text-green-600 font-semibold">
-                      <FaBangladeshiTakaSign /> {booking.price}
-                    </span>
-                  </td>
-                  <td>
-                    <div className="flex items-center justify-center gap-2 font-semibold">
-                      <FaCheckCircle
-                        className={
-                          booking.status === "confirmed"
-                            ? "text-green-500"
-                            : booking.status === "pending"
-                            ? "text-yellow-500"
-                            : "text-red-500"
-                        }
+              {bookings.map((booking, idx) => {
+                const { label, icon: Icon, color } = STATUS_MAP[booking.status] || {};
+                return (
+                  <tr
+                    key={booking._id}
+                    className={`transition-all hover:bg-blue-50 ${borderColors[idx % borderColors.length]}`}
+                  >
+                    <td className="py-3 font-semibold">{idx + 1}</td>
+                    <td>
+                      <motion.img
+                        whileHover={{ scale: 1.1 }}
+                        src={booking.packageImage}
+                        alt={booking.packageTitle}
+                        className="w-16 h-16 rounded-full object-cover mx-auto border-2 border-gray-300 shadow"
                       />
-                      <span className="capitalize">{booking.status}</span>
-                    </div>
-                  </td>
-                  <td className="flex justify-center flex-wrap gap-2 py-3">
-                    <button
-                      onClick={() => handleCancel(booking._id)}
-                      disabled={cancelingId === booking._id}
-                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded cursor-pointer transition disabled:opacity-50"
-                    >
-                      {cancelingId === booking._id ? "Canceling..." : "Cancel"}
-                    </button>
-                    {booking.status === "pending" && (
-                      <button
-                        onClick={() => handlePayNow(booking)}
-                        className="bg-green-500 hover:bg-green-600 text-white px-4 py-1.5 rounded cursor-pointer transition"
-                      >
-                        Pay Now
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="font-medium text-blue-700">{booking.packageTitle}</td>
+                    <td className="text-gray-600">{booking.tourGuideName || "—"}</td>
+                    <td>
+                      <p className="flex justify-center items-center gap-2 text-gray-600">
+                        <FaCalendarAlt className="text-blue-500" />
+                        {new Date(booking.tourDate).toLocaleDateString()}
+                      </p>
+                    </td>
+                    <td>
+                      <span className="flex items-center justify-center gap-1 text-green-600 font-semibold">
+                       <CiBadgeDollar /> {booking.price}
+                      </span>
+                    </td>
+                  
+                    <td>
+  <div className="flex items-center justify-center gap-2 font-semibold">
+    <FaCheckCircle
+      className={
+        booking.status === "confirmed"
+          ? "text-green-500"
+          : booking.status === "pending"
+          ? "text-yellow-500"
+          : booking.status === "in review"
+          ? "text-blue-500"
+          : "text-red-500"
+      }
+    />
+    <span
+      className={
+        booking.status === "confirmed"
+          ? "text-green-600"
+          : booking.status === "pending"
+          ? "text-yellow-600"
+          : booking.status === "in review"
+          ? "text-blue-600"
+          : "text-red-600"
+      }
+    >
+      {booking.status}
+    </span>
+  </div>
+</td>
+
+                    <td className="flex justify-center flex-wrap gap-2 py-3">
+                     {  
+                     booking.status === "in-review" ? (
+    <button className="btn bg-green-500 text-white cursor-default px-4 py-2 rounded flex items-center gap-2 opacity-40" >
+  <FaCheckCircle />
+  Paid
+</button>
+
+
+  ) :(
+                        <>
+                         {/* Cancel always shown when still pending/in_review */}
+                      {(booking.status === "pending" || booking.status === "in_review") && (
+                        <button
+                          onClick={() => handleCancel(booking._id)}
+                          disabled={cancelingId === booking._id}
+                          className="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded cursor-pointer transition disabled:opacity-50"
+                        >
+                          {cancelingId === booking._id ? "Canceling..." : "Cancel"}
+                        </button>
+                      )}
+
+                      {/* Pay only when truly “pending” (awaiting payment) */}
+                      {booking.status === "pending" && (
+                        <button
+                          onClick={() => handlePayNow(booking)}
+                          className="bg-green-500 hover:bg-green-600 text-white px-4 py-1.5 rounded cursor-pointer transition"
+                        >
+                          
+                          Pay Now
+                        </button>
+                      )}
+                        </>
+                      )
+                     }
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
 
@@ -197,6 +260,4 @@ const MyBookings = () => {
       )}
     </div>
   );
-};
-
-export default MyBookings;
+}
