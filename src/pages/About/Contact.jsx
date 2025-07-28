@@ -3,7 +3,7 @@ import React from "react";
 
 const Contact = () => {
   return (
-    <div className="mt-20 bg-white rounded-xl shadow-lg p-6 text-center">
+    <div className="mt-20 bg-white rounded-xl shadow-lg p-6 text-center bg-gradient-to-r from-pink-100 via-blue-100 to-purple-100">
       <h2 className="text-3xl font-bold mb-4 text-gray-800">Contact Us</h2>
       <p className="text-gray-600 mb-4">We’d love to hear from you! Reach out to us through any of the platforms below.</p>
       <div className="flex justify-center gap-4">

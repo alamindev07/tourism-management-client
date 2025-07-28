@@ -26,7 +26,7 @@ const PackagesSection = () => {
         {packages.map((pkg, index) => (
           <motion.div
             key={pkg._id}
-            className="bg-white dark:bg-gray-900 rounded-3xl shadow-md hover:shadow-2xl transition-transform duration-300 overflow-hidden border border-gray-100"
+            className="bg-white dark:bg-gray-900 rounded-3xl shadow-md hover:shadow-2xl transition-transform duration-300 overflow-hidden border border-gray-100 bg-gradient-to-r from-pink-100 via-blue-100 to-purple-100"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.15 }}

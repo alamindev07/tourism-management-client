@@ -3,7 +3,7 @@ import { FaUserCircle } from "react-icons/fa";
 
 const TourGuideCard = ({ guide }) => {
   return (
-    <div className="bg-white dark:bg-slate-800 shadow-lg hover:shadow-2xl rounded-2xl p-6 transform transition duration-300 hover:scale-[1.03] border border-purple-100 hover:border-purple-300">
+    <div className="bg-white dark:bg-slate-800 shadow-lg hover:shadow-2xl rounded-2xl p-6 transform transition duration-300 hover:scale-[1.03] border border-purple-100 hover:border-purple-300 bg-gradient-to-r from-blue-100 via-pink-100 to-pink-100">
       <div className="flex flex-col items-center">
         <img
           src={guide.photoURL || "https://i.ibb.co/album/FakeUser.jpg"}

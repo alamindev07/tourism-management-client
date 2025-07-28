@@ -7,7 +7,7 @@ import { developers } from "../../data/developers ";
 
 const AboutUs = () => {
   return (
-    <section className="px-4 py-10 md:px-10 lg:px-20 bg-gradient-to-b from-gray-50 to-white">
+    <section className="px-4 py-10 md:px-10 lg:px-20 bg-gradient-to-r from-amber-50 via-blue-100 to-amber-50">
       <h2 className="text-4xl font-bold text-center mb-10 text-gray-800">
         Meet Our Developers
       </h2>
@@ -15,7 +15,7 @@ const AboutUs = () => {
         {developers.map((dev, idx) => (
           <div
             key={idx}
-            className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition p-6 flex flex-col"
+            className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition p-6 flex flex-col bg-gradient-to-r from-pink-100 via-blue-100 to-purple-100"
           >
             <img
               src={dev.photo}

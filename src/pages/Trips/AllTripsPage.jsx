@@ -59,7 +59,7 @@ const AllTripsPage = () => {
               />
             </figure>
 
-            <div className="p-5 space-y-4 flex flex-col flex-grow">
+            <div className="p-5 space-y-4 flex flex-col flex-grow bg-gradient-to-r from-pink-100 via-blue-100 to-purple-100">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                 {pkg.title}
               </h3>

@@ -17,6 +17,7 @@ import {
 import { AuthContext } from "../context/AuthProvider";
 import useRole from "../hooks/useRole";
 import LoadingSpinner from "../pages/LoadingSpiner/LoadingSpinner";
+import { LucideLayoutDashboard } from "lucide-react";
 
 const DashboardLayout = () => {
   const { user } = useContext(AuthContext);
@@ -59,7 +60,7 @@ const DashboardLayout = () => {
       <div className="flex justify-between items-center p-4 bg-slate-800 text-white md:hidden shadow-md">
 <Link to="/dashboard">        <h2 className="text-lg font-bold tracking-wide">Dashboard</h2>
 </Link>
-        <button onClick={toggleSidebar} className="focus:outline-none">
+        <button onClick={toggleSidebar} className="focus:outline-none cursor-pointer">
           <FaBars size={24} />
         </button>
       </div>
@@ -71,8 +72,10 @@ const DashboardLayout = () => {
       >
         <div className="mb-6">
          <h2 className="text-2xl md:text-3xl font-extrabold text-center md:text-left text-slate-800">
-  <span className="text-green-600 animate-pulse">Dashboard Role As</span>{" "}
-  <span className="text-pink-600 typing-animation block mt-1">{role || "Anonymous"}</span>
+  <span className="text-green-600 animate-pulse flex  items-center gap-2"> <LucideLayoutDashboard />
+   <span className="text-pink-600 typing-animation block mt-1">{role || "Anonymous"} <span className="text-green-600">Role</span></span>
+</span>{" "}
+ 
 </h2>
 
           {user && (
@@ -94,9 +97,9 @@ const DashboardLayout = () => {
 
         <button
           onClick={handleBackHome}
-          className="flex items-center gap-2 text-sm text-slate-700 font-medium bg-slate-100 px-3 py-2 rounded-md hover:bg-green-400 transition w-full btn"
+          className="flex items-center gap-2 text-sm text-slate-700 font-medium bg-green-500 px-3 py-2 rounded-md hover:bg-purple-200 transition w-full cursor-pointer"
         >
-          <FaArrowLeft /> Back to Home
+         <FaHome /> <FaArrowLeft /> Back to Home
         </button>
 
         <nav className="mt-6 flex flex-col gap-2">

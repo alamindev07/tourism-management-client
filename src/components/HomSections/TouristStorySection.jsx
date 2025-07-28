@@ -1,37 +1,29 @@
-import { useEffect, useState, useRef, useContext } from 'react'; 
+import { useQuery } from '@tanstack/react-query';
 import { FacebookShareButton, FacebookIcon } from 'react-share';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import useAxiosSecure from '../../hooks/useAxiosSecure';
 import { format } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 import useAuth from '../../hooks/useAuth';
 
 const TouristStorySection = () => {
-  const [stories, setStories] = useState([]);
-  const [loading, setLoading] = useState(true);
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const intervalRef = useRef(null);
 
-  const fetchStories = async () => {
-    try {
-      setLoading(true);
+  const { data: stories = [], isLoading } = useQuery({
+    queryKey: ['randomStories'],
+    queryFn: async () => {
       const res = await axiosSecure.get('/api/stories/random');
-      setStories(res.data);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchStories();
-    intervalRef.current = setInterval(fetchStories, 4000);
-    return () => clearInterval(intervalRef.current);
-  }, []);
+      return res.data;
+    },
+    staleTime: 1000 * 60 * 5,
+    cacheTime: 1000 * 60 * 10,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
 
   return (
     <div className="px-4 md:px-10 lg:px-20 py-14 bg-gradient-to-b from-[#f9fbff] to-[#edf3fa]">
@@ -44,18 +36,15 @@ const TouristStorySection = () => {
         Traveler Stories
       </motion.h2>
 
-      {loading ? (
+      {isLoading ? (
         <div className="flex justify-center items-center min-h-[200px]">
           <span className="loading loading-spinner loading-lg text-primary"></span>
         </div>
       ) : (
         <motion.div
-          variants={{
-            hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
-          }}
-          initial="hidden"
-          animate="visible"
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
         >
           <AnimatePresence mode="wait">
@@ -63,15 +52,16 @@ const TouristStorySection = () => {
               <motion.div
                 key={story._id}
                 variants={{
-                  hidden: { opacity: 0, y: 30 },
-                  visible: { opacity: 1, y: 0 },
-                  exit: { opacity: 0, y: -30 },
+                  hidden: { opacity: 0, x: 50 },
+                  visible: { opacity: 1, x: 0 },
+                  exit: { opacity: 0, x: -50 },
                 }}
                 initial="hidden"
                 animate="visible"
                 exit="exit"
                 layout
-                className="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-shadow duration-500 cursor-pointer overflow-hidden flex flex-col"
+                transition={{ duration: 0.5, ease: 'easeInOut' }}
+                className="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-shadow duration-500 cursor-pointer overflow-hidden flex flex-col bg-gradient-to-r from-green-50 via-olive-100 to-blue-100"
               >
                 <img
                   src={story.images?.[0]}
@@ -129,7 +119,7 @@ const TouristStorySection = () => {
       <div className="text-center mt-12">
         <Link
           to="/community"
-          className="inline-block bg-gradient-to-r from-orange-600 via-orange-500 to-orange-700 hover:from-green-700 hover:to-green-800 text-white px-8 py-3 rounded-full font-semibold shadow-md hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+          className="inline-block bg-orange-600 hover:bg-green-500 px-8 py-3 rounded-full font-semibold shadow-md hover:shadow-xl transform hover:scale-105 transition-all duration-300"
         >
           View All Stories
         </Link>

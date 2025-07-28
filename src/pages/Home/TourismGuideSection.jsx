@@ -22,7 +22,7 @@ const TourismGuideSection = () => {
   });
 
   return (
-    <section className="px-4 md:px-10 py-10 bg-gradient-to-br from-indigo-950 via-orange-900 to-indigo-900 text-white">
+    <section className="px-4 md:px-10 py-10 bg-gradient-to-br from-indigo-950 via-blue-900 to-indigo-900 text-white">
       {/* bg-gradient-to-br from-indigo-950 via-purple-900 to-indigo-900 */}
       <h2 className="text-3xl font-bold text-center mb-10">
         Tourism and Travel Guide

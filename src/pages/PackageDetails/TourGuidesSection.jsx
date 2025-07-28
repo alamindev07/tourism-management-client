@@ -1,8 +1,14 @@
+
+
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Users } from "lucide-react";
+import { FaUserCircle } from "react-icons/fa";
 
 const TourGuidesSection = ({ guides }) => {
+  // Filter only users with role "tourguide"
+  const tourGuides = guides?.filter((guide) => guide.role === "tourguide") || [];
+
   return (
     <motion.section
       className="mt-12 px-4"
@@ -19,9 +25,9 @@ const TourGuidesSection = ({ guides }) => {
       </div>
 
       {/* Guides Grid */}
-      {guides && guides.length > 0 ? (
+      {tourGuides.length > 0 ? (
         <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {guides.map((guide) => (
+          {tourGuides.map((guide) => (
             <motion.div
               key={guide._id}
               whileHover={{ scale: 1.05 }}
@@ -29,7 +35,7 @@ const TourGuidesSection = ({ guides }) => {
             >
               <Link
                 to={`/dashboard/guide/profile/${guide._id}`}
-                className="group flex flex-col items-center text-center p-4 rounded-xl shadow-md hover:shadow-xl border dark:border-gray-800 bg-white dark:bg-gray-900 transition-all duration-300"
+                className="group flex flex-col items-center text-center p-4 rounded-xl shadow-md hover:shadow-xl dark:border-gray-800 bg-white dark:bg-gray-900 transition-all duration-300 bg-gradient-to-r from-cyan-100 via-teal-50 to-teal-100"
                 aria-label={`View profile of ${guide.displayName}`}
               >
                 <img
@@ -41,7 +47,11 @@ const TourGuidesSection = ({ guides }) => {
                   className="w-24 h-24 rounded-full object-cover mb-3 ring-2 ring-transparent group-hover:ring-primary transition-all duration-300"
                 />
                 <span className="font-semibold text-lg group-hover:text-primary transition">
-                  {guide.displayName}
+                  {guide.name}
+                </span>
+                <span className="mt-5 inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full border border-purple-500 text-purple-700 hover:bg-purple-600 hover:text-white transition-all duration-300 font-medium shadow-sm">
+                  <FaUserCircle className="text-lg" />
+                  View Profile
                 </span>
               </Link>
             </motion.div>

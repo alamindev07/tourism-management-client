@@ -26,7 +26,7 @@ const TourPlan = ({ pkg }) => {
             className="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition"
           >
             <button
-              className="flex justify-between items-center w-full px-5 py-4 bg-gradient-to-r from-green-50 to-white"
+              className="flex justify-between items-center w-full px-5 py-4 bg-gradient-to-r from-green-50 to-white cursor-pointer"
               onClick={() => toggleDay(index)}
             >
               <div className="flex items-center gap-3">

@@ -61,7 +61,7 @@ import overviewVideo from "../../assets/overview.mp4"; // replace with actual vi
 
 const OverviewSection = () => {
   return (
-    <section className="bg-base-200 py-20">
+    <section className=" py-20 bg-gradient-to-r from-pink-100 via-blue-100 to-purple-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 50 }}

@@ -15,6 +15,7 @@ const useRole = () => {
       
 
       axiosSecure.get(`api/users/${user.email}`)
+        // axiosSecure.get(`/api/users/role/email/${encodeURIComponent(user.email)}`)
         .then(res => {
           console.log("Fetched user role:", res.data?.role, "for", user.email);
           setRole(res.data?.role || "tourist");
@@ -33,3 +34,5 @@ const useRole = () => {
 };
 
 export default useRole;
+
+

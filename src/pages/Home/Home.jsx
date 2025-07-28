@@ -14,7 +14,7 @@ import WhyChooseUsSection from '../../components/HomSections/WhyChooseUsSection'
 
 const Home = () => {
   return (
-    <div className="space-y-10">
+    <div className="">
     {/* === Banner Section === */}
       <Banner />
     {/* === overview Section === */}

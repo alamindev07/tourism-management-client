@@ -55,7 +55,7 @@ const CommunityPage = () => {
   };
 
   return (
-    <section className="px-4 md:px-10 lg:px-20 py-14 bg-gray-50 min-h-screen">
+    <section className="px-4 md:px-10 lg:px-20 py-14 bg-gray-50 min-h-screen ">
       <h2 className="text-4xl font-extrabold text-center text-gray-800 mb-8">
         Community Stories
       </h2>
@@ -79,7 +79,7 @@ const CommunityPage = () => {
               key={story._id}
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
-              className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col hover:shadow-xl"
+              className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col hover:shadow-xl bg-gradient-to-r from-blue-100 via-pink-100 to-blue-100"
             >
               <img
                 src={story.images?.[0] || "/placeholder.jpg"}

@@ -9,7 +9,7 @@ const WhyChooseUsSection = () => {
   ];
 
   return (
-    <div className="px-4 md:px-10 lg:px-20 py-12 bg-gray-50">
+    <div className="px-4 md:px-10 lg:px-20 py-12 bg-gray-100">
       <motion.h2
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -26,7 +26,7 @@ const WhyChooseUsSection = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: index * 0.2, type: "spring" }}
-            className="bg-white shadow rounded-xl p-6 text-center hover:shadow-lg transition"
+            className="bg-white shadow rounded-xl p-6 text-center hover:shadow-lg transition bg-gradient-to-r from-blue-100 via-green-100 to-amber-50"
           >
             <div className="text-4xl mb-4">{item.icon}</div>
             <h3 className="font-semibold text-lg mb-2">{item.title}</h3>

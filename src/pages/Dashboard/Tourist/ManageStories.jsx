@@ -58,6 +58,10 @@ const ManageStories = () => {
     }
   };
 
+  if(loading)
+    return <LoadingSpinner></LoadingSpinner>
+  
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <h2 className="text-3xl font-extrabold mb-6 text-center text-teal-700">

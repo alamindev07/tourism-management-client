@@ -27,9 +27,19 @@ const ManageCandidates = () => {
     },
     onSuccess: (data) => {
       if (data.applicationDeleted) {
-        toast.success("User promoted to Tour Guide and application removed!");
+        // toast.success("User promoted to Tour Guide and application removed!");
+        Swal.fire(
+            "Cancelled!",
+            "User promoted to Tour Guide and application removed!",
+            "success"
+          );
       } else {
-        toast.success("User promoted to Tour Guide!");
+        // toast.success("User promoted to Tour Guide!");
+        Swal.fire(
+                    "Approved!",
+                    "User promoted to Tour Guide!",
+                    "success"
+                  );
       }
       queryClient.invalidateQueries(["guideApplications"]);
     },
@@ -44,7 +54,12 @@ const ManageCandidates = () => {
       await axiosSecure.delete(`/api/guide-applications/${id}`);
     },
     onSuccess: () => {
-      toast.success("Application rejected.");
+      // toast.success("Application rejected.");
+      Swal.fire(
+            "Cancelled!",
+            "Application rejected.",
+            "success"
+          );
       queryClient.invalidateQueries(["guideApplications"]);
     },
     onError: () => {
@@ -139,14 +154,14 @@ const ManageCandidates = () => {
                   <td className="px-4 py-3 flex gap-3 justify-center">
                     <button
                       onClick={() => acceptMutation.mutate(app)}
-                      className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-full text-sm flex items-center gap-1"
+                      className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-full text-sm flex items-center gap-1 cursor-pointer"
                       disabled={acceptMutation.isLoading}
                     >
                       <FaCheckCircle /> Accept
                     </button>
                     <button
                       onClick={() => handleReject(app._id)}
-                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-full text-sm flex items-center gap-1"
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-full text-sm flex items-center gap-1 cursor-pointer"
                       disabled={rejectMutation.isLoading}
                     >
                       <FaTimesCircle /> Reject

@@ -133,12 +133,12 @@ const TouristPanel = () => {
         </motion.div>
       </div>
 
-       <div className='flex justify-center items-center mt-6'>
+       <div className='flex justify-center items-center mt-15'>
          <Link to="/dashboard/join-guide">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="btn btn-accent px-6 text-white text-lg rounded-full shadow-md"
+                    className="btn btn-accent px-6 text-white text-lg rounded-full shadow-md cursor-pointer"
                   >
                     Apply for Tour Guide
                   </motion.button>
