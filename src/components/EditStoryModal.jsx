@@ -1,9 +1,9 @@
 
 import { useState } from "react";
 import axios from "axios";
-import axiosInstance from "../api/axiosInstance";
 import { toast } from "react-hot-toast";
 import Swal from "sweetalert2";
+import axiosInstance from "../api/axiosInstance";
 
 const EditStoryModal = ({ story, onClose, refetch }) => {
   const [title, setTitle] = useState(story.title);
@@ -47,7 +47,7 @@ const EditStoryModal = ({ story, onClose, refetch }) => {
         removeImages: removedImages,
       };
 
-      await axiosInstance.put(`/stories/${story._id}`, payload);
+      await axiosInstance.put(`/api/stories/${story._id}`, payload);
 
       Swal.fire({
   title: "Story updated!",

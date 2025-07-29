@@ -59,6 +59,7 @@ export default function MyBookings() {
 
   const [cancelingId, setCancelingId] = useState(null);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [guideNames, setGuideNames] = useState({});
 
   const {
     data: bookings = [],
@@ -84,6 +85,37 @@ export default function MyBookings() {
       setTimeout(() => setShowConfetti(false), 6000);
     }
   }, [bookings]);
+
+
+
+
+useEffect(() => {
+  const fetchGuideNames = async () => {
+    const uniqueIds = [...new Set(bookings.map(b => b.tourGuideId))];
+
+    const nameMap = {};
+    await Promise.all(
+      uniqueIds.map(async (id) => {
+        try {
+          const res = await axiosSecure.get(`/api/users/id/${id}`);
+          nameMap[id] = res.data.name || "Unknown";
+        } catch {
+          nameMap[id] = "Unknown";
+        }
+      })
+    );
+    setGuideNames(nameMap);
+  };
+
+  if (bookings.length) fetchGuideNames();
+}, [bookings, axiosSecure]);
+
+
+
+
+
+
+
 
   const handleCancel = async (id) => {
     const result = await Swal.fire({
@@ -162,7 +194,7 @@ export default function MyBookings() {
                       />
                     </td>
                     <td className="font-medium text-blue-700">{booking.packageTitle}</td>
-                    <td className="text-gray-600">{booking.tourGuideName || "—"}</td>
+                    <td className="text-gray-600"> {guideNames[booking.tourGuideId] || "—"}</td>
                     <td>
                       <p className="flex justify-center items-center gap-2 text-gray-600">
                         <FaCalendarAlt className="text-blue-500" />

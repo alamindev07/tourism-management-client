@@ -4,7 +4,6 @@ import {
   FaUser,
   FaUsers,
   FaHome,
-  FaUserShield,
   FaBars,
   FaArrowLeft,
   FaSuitcase,
@@ -149,12 +148,8 @@ const DashboardLayout = () => {
           {/* Admin role */}
           {role === "admin" && (
             <>
-              {navItem("/dashboard/profile", <FaUser />, "Manage Profile")}
-              {navItem(
-                "/dashboard/assigned-tours",
-                <FaMapMarkedAlt />,
-                "My Assigned Tours"
-              )}
+              {navItem("/dashboard/adminProfile", <FaUser />, "Manage Profile")}
+             
               {navItem("/dashboard/stories/add", <FaPlus />, "Add Stories")}
               {navItem(
                 "/dashboard/manage-stories",

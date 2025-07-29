@@ -52,7 +52,7 @@ const AdminPanel = () => {
           <ShieldCheck className="text-teal-600 mx-auto mb-4" size={42} />
           <h3 className="text-xl font-semibold mb-2">Review Guide Requests</h3>
           <p className="text-gray-600 mb-4">Approve or reject tour guide applications.</p>
-          <Link to="/dashboard/admin/guide-requests" className="inline-block px-4 py-2 rounded-full bg-teal-600 text-white hover:bg-teal-700 transition">
+          <Link to="/dashboard/admin/manage-candidates" className="inline-block px-4 py-2 rounded-full bg-teal-600 text-white hover:bg-teal-700 transition">
             Review Requests
           </Link>
         </motion.div>
@@ -60,9 +60,9 @@ const AdminPanel = () => {
         {/* Admin Stories */}
         <motion.div variants={cardVariants} whileHover="hover" className="bg-white rounded-2xl shadow-lg p-6 text-center border border-purple-200">
           <NotebookText className="text-purple-600 mx-auto mb-4" size={42} />
-          <h3 className="text-xl font-semibold mb-2">All User Stories</h3>
-          <p className="text-gray-600 mb-4">Moderate or delete inappropriate stories.</p>
-          <Link to="/dashboard/manage-stories" className="inline-block px-4 py-2 rounded-full bg-purple-600 text-white hover:bg-purple-700 transition">
+          <h3 className="text-xl font-semibold mb-2">Explore Stories</h3>
+          <p className="text-gray-600 mb-4">See all user stories whatever they shared</p>
+          <Link to="/community" className="inline-block px-4 py-2 rounded-full bg-purple-600 text-white hover:bg-purple-700 transition">
             View Stories
           </Link>
         </motion.div>

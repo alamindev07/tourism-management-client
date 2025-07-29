@@ -156,7 +156,7 @@ const AddStory = () => {
 
         <button
           type="submit"
-          className="w-full py-3 bg-teal-500 hover:bg-teal-600 text-white font-bold rounded-lg shadow-lg transition-transform transform hover:scale-105"
+          className="w-full py-3 bg-teal-500 hover:bg-teal-600 text-white font-bold rounded-lg shadow-lg transition-transform transform hover:scale-105 cursor-pointer"
         >
           Submit Story
         </button>

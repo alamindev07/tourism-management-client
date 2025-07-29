@@ -32,6 +32,7 @@ import TourGuideProfile from '../pages/Dashboard/TourGuide/TourGuideProfile';
 import MyBookings from '../pages/Dashboard/Tourist/MyBookings';
 import PaymentPage from '../pages/PaymentPage';
 import AssignedTours from '../pages/Dashboard/TourGuide/AssignedTours';
+import UpdateAdminProfile from '../pages/Dashboard/Admin/UpdateAdminProfile';
 
 const router = createBrowserRouter([
   {
@@ -60,6 +61,14 @@ const router = createBrowserRouter([
       { index: true, element: <DashboardRedirect /> },
 
       // Admin Routes
+      {
+        path: 'adminProfile',
+        element: (
+          <RoleBasedRoute allowedRoles={['admin']}>
+            <UpdateAdminProfile />
+          </RoleBasedRoute>
+        ),
+      },
       {
         path: 'admin',
         element: (
@@ -141,7 +150,7 @@ const router = createBrowserRouter([
       {
         path: 'profile',
         element: (
-          <RoleBasedRoute allowedRoles={['admin', 'tourguide', 'tourist']}>
+          <RoleBasedRoute allowedRoles={['tourguide', 'tourist']}>
             <ManageProfile />
           </RoleBasedRoute>
         ),
