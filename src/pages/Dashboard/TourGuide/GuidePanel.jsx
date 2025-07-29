@@ -61,7 +61,7 @@ const GuidePanel = () => {
           <Users2 className="text-blue-600 mx-auto mb-4" size={42} />
           <h3 className="text-xl font-semibold mb-2">My Tourists</h3>
           <p className="text-gray-600 mb-4">Check out the users who've booked your packages.</p>
-          <Link to="/dashboard/clients" className="inline-block px-4 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition">
+          <Link to="/dashboard/assignedTours" className="inline-block px-4 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition">
             View Clients
           </Link>
         </motion.div>

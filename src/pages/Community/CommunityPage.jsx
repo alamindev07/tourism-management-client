@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../../context/AuthProvider";
 import toast from "react-hot-toast";
+import CustomHelmet from "../../components/shared/CustomHelmet";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -75,6 +76,7 @@ const CommunityPage = () => {
 
   return (
     <section className="px-4 md:px-10 lg:px-20 py-14 min-h-screen ">
+       <CustomHelmet title="Community - TourWise App" />
       <h2 className="text-4xl font-extrabold text-center text-gray-800 mb-8">
         Community Stories
       </h2>

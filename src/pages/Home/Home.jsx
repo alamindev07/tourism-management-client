@@ -10,11 +10,15 @@ import TourismGuideSection from './TourismGuideSection';
 import TouristStorySection from '../../components/HomSections/TouristStorySection';
 import PopularDestinationsSection from '../../components/HomSections/PopularDestinationsSection';
 import WhyChooseUsSection from '../../components/HomSections/WhyChooseUsSection';
+import CustomHelmet from '../../components/shared/CustomHelmet';
 // import PackagesSection from './PackagesSection';
 
 const Home = () => {
   return (
+    
     <div className="">
+
+       <CustomHelmet title="Home - TourWise App" />
     {/* === Banner Section === */}
       <Banner />
     {/* === overview Section === */}
