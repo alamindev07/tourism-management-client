@@ -53,7 +53,7 @@ const AddPackage = () => {
             <input
               {...register("title")}
               placeholder="Package title"
-              className="input input-bordered w-full focus:ring focus:ring-sky-300"
+              className="input input-bordered w-full focus:ring focus:ring-sky-300  text-black dark:bg-slate-200"
               required
             />
           </div>
@@ -64,7 +64,7 @@ const AddPackage = () => {
               type="number"
               {...register("price")}
               placeholder="Price in dollars"
-              className="input input-bordered w-full focus:ring focus:ring-sky-300"
+              className="input input-bordered w-full focus:ring focus:ring-sky-300 text-black dark:bg-slate-200"
               required
             />
           </div>
@@ -74,7 +74,7 @@ const AddPackage = () => {
             <input
               {...register("duration")}
               placeholder="e.g., 7 days"
-              className="input input-bordered w-full focus:ring focus:ring-sky-300"
+              className="input input-bordered w-full focus:ring focus:ring-sky-300 text-black dark:bg-slate-200"
               required
             />
           </div>
@@ -84,7 +84,7 @@ const AddPackage = () => {
             <input
               {...register("location")}
               placeholder="e.g., Bandarban, Bangladesh"
-              className="input input-bordered w-full focus:ring focus:ring-sky-300"
+              className="input input-bordered w-full focus:ring focus:ring-sky-300 text-black dark:bg-slate-200"
               required
             />
           </div>
@@ -94,7 +94,7 @@ const AddPackage = () => {
             <input
               {...register("images")}
               placeholder="Paste image URLs, separated by commas"
-              className="input input-bordered w-full focus:ring focus:ring-sky-300"
+              className="input input-bordered w-full focus:ring focus:ring-sky-300 text-black dark:bg-slate-200"
               required
             />
           </div>
@@ -103,7 +103,7 @@ const AddPackage = () => {
             <label className="label font-semibold text-sky-700">Category</label>
             <select
               {...register("category")}
-              className="select select-bordered w-full focus:ring focus:ring-sky-300"
+              className="select select-bordered w-full focus:ring focus:ring-sky-300 text-black dark:bg-slate-200"
               required
             >
               <option value="">Select a category</option>
@@ -119,7 +119,7 @@ const AddPackage = () => {
             <textarea
               {...register("description")}
               placeholder="Write a short description about the travel experience..."
-              className="textarea textarea-bordered w-full focus:ring focus:ring-sky-300"
+              className="textarea textarea-bordered w-full focus:ring focus:ring-sky-300 text-black dark:bg-slate-200"
               rows="4"
               required
             />

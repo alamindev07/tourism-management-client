@@ -1,11 +1,10 @@
-
 import React, { useContext, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Lottie from "lottie-react";
 import { FcGoogle } from "react-icons/fc";
 import { AuthContext } from "../../context/AuthProvider";
 import registerAnimation from "../../assets/registration.json";
-import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 import { saveUserToDB } from "../../api/saveUserToDB";
 
@@ -18,8 +17,6 @@ const Register = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Where to redirect after registration (default "/")
-  // const from = location.state?.from?.pathname || "/";
   const from = location.state?.from?.pathname || location.state?.shareUrl || "/";
 
   const handleRegister = async (e) => {
@@ -33,7 +30,14 @@ const Register = () => {
     const email = form.email.value.trim();
     const password = form.password.value;
 
-    toast.loading("Registering user...");
+    // Show loading alert
+    Swal.fire({
+      title: 'Registering user...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
 
     try {
       const result = await createUser(email, password);
@@ -51,15 +55,26 @@ const Register = () => {
 
       await saveUserToDB(userToSave);
 
-      toast.dismiss();
-      toast.success("User registration successful!");
+      Swal.close();
+      Swal.fire({
+        icon: "success",
+        title: "User registration successful!",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
       form.reset();
       navigate(from, { replace: true });
     } catch (err) {
-      toast.dismiss();
+      Swal.close();
       console.error("Register error:", err);
-      setError(err.message || "Registration failed.");
-      toast.error(err.message || "Registration failed.");
+      const message = err.message || "Registration failed.";
+      setError(message);
+      Swal.fire({
+        icon: "error",
+        title: "Registration Failed",
+        text: message,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -68,7 +83,14 @@ const Register = () => {
   const handleGoogleSignIn = async () => {
     setError("");
     setIsGoogleLoading(true);
-    toast.loading("Signing in with Google...");
+
+    Swal.fire({
+      title: 'Signing in with Google...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
 
     try {
       const result = await signInWithGoogle();
@@ -83,14 +105,26 @@ const Register = () => {
       };
 
       await saveUserToDB(userToSave);
-      toast.dismiss();
-      toast.success("Registered with Google successfully!");
+
+      Swal.close();
+      Swal.fire({
+        icon: "success",
+        title: "Registered with Google successfully!",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
       navigate(from, { replace: true });
     } catch (err) {
-      toast.dismiss();
+      Swal.close();
       console.error("Google sign-in error:", err);
-      setError(err.message || "Google sign-in failed.");
-      toast.error(err.message || "Google sign-in failed.");
+      const message = err.message || "Google sign-in failed.";
+      setError(message);
+      Swal.fire({
+        icon: "error",
+        title: "Google Sign-in Failed",
+        text: message,
+      });
     } finally {
       setIsGoogleLoading(false);
     }

@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { FaMapMarkerAlt, FaClock } from "react-icons/fa";
 import { TbCoinTakaFilled } from "react-icons/tb";
 import { useState } from "react";
+import CustomHelmet from "../../components/shared/CustomHelmet";
 
 const AllTripsPage = () => {
   const axiosSecure = useAxiosSecure();
@@ -40,6 +41,9 @@ const AllTripsPage = () => {
 
   return (
     <section className="px-4 py-10 max-w-7xl mx-auto bg-gray-50 dark:bg-gray-900 min-h-screen">
+             <CustomHelmet title="AllTrips - TourWise App" />
+      
+      
       <h2 className="text-4xl font-bold text-center mb-10 bg-gradient-to-r from-indigo-500 via-pink-500 to-purple-500 bg-clip-text text-transparent">
         ✨ All Travel Packages
       </h2>
@@ -63,16 +67,16 @@ const AllTripsPage = () => {
             </figure>
 
             <div className="p-5 space-y-4 flex flex-col flex-grow bg-gradient-to-r from-pink-100 via-blue-100 to-purple-100">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{pkg.title}</h3>
-              <p className="text-gray-600 dark:text-gray-300 text-sm flex-grow">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-purple-500">{pkg.title}</h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm flex-grow">
                 {pkg.description?.slice(0, 100)}...
               </p>
 
-              <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
-                <span className="flex items-center gap-1">
+              <div className="flex justify-between text-sm text-gray-500 dark:text-amber-400">
+                <span className="flex items-center gap-1 text-amber-600">
                   <FaMapMarkerAlt className="text-rose-500" /> {pkg.location}
                 </span>
-                <span className="flex items-center gap-1">
+                <span className="flex items-center gap-1 text-stone-600">
                   <FaClock className="text-indigo-500" /> {pkg.duration}
                 </span>
               </div>

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
 import { Link } from 'react-router-dom';
 import { Users, Settings, ShieldCheck, NotebookText } from 'lucide-react';
+import CustomHelmet from '../../../components/shared/CustomHelmet';
 
 const cardVariants = {
   hover: {
@@ -14,6 +15,9 @@ const cardVariants = {
 const AdminPanel = () => {
   return (
     <div className="p-6 md:p-10 min-h-screen bg-gradient-to-br from-white via-indigo-50 to-indigo-100">
+            <CustomHelmet title="Admin Pannel - TourWise App" />
+     
+     
       <motion.div className="text-center mb-6">
         <TypeAnimation
           sequence={[
@@ -40,7 +44,7 @@ const AdminPanel = () => {
         {/* Manage Users */}
         <motion.div variants={cardVariants} whileHover="hover" className="bg-white rounded-2xl shadow-lg p-6 text-center border border-indigo-200">
           <Users className="text-indigo-600 mx-auto mb-4" size={42} />
-          <h3 className="text-xl font-semibold mb-2">Manage Users</h3>
+          <h3 className="text-xl font-semibold mb-2 text-pink-400">Manage Users</h3>
           <p className="text-gray-600 mb-4">View, update, and assign roles to users.</p>
           <Link to="/dashboard/admin/manage-users" className="inline-block px-4 py-2 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition">
             Open Users
@@ -50,7 +54,7 @@ const AdminPanel = () => {
         {/* Manage Guide Applications */}
         <motion.div variants={cardVariants} whileHover="hover" className="bg-white rounded-2xl shadow-lg p-6 text-center border border-teal-200">
           <ShieldCheck className="text-teal-600 mx-auto mb-4" size={42} />
-          <h3 className="text-xl font-semibold mb-2">Review Guide Requests</h3>
+          <h3 className="text-xl font-semibold mb-2 text-amber-400">Review Guide Requests</h3>
           <p className="text-gray-600 mb-4">Approve or reject tour guide applications.</p>
           <Link to="/dashboard/admin/manage-candidates" className="inline-block px-4 py-2 rounded-full bg-teal-600 text-white hover:bg-teal-700 transition">
             Review Requests
@@ -60,7 +64,7 @@ const AdminPanel = () => {
         {/* Admin Stories */}
         <motion.div variants={cardVariants} whileHover="hover" className="bg-white rounded-2xl shadow-lg p-6 text-center border border-purple-200">
           <NotebookText className="text-purple-600 mx-auto mb-4" size={42} />
-          <h3 className="text-xl font-semibold mb-2">Explore Stories</h3>
+          <h3 className="text-xl font-semibold mb-2 text-sky-400">Explore Stories</h3>
           <p className="text-gray-600 mb-4">See all user stories whatever they shared</p>
           <Link to="/community" className="inline-block px-4 py-2 rounded-full bg-purple-600 text-white hover:bg-purple-700 transition">
             View Stories

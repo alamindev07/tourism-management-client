@@ -69,7 +69,7 @@ const JoinAsGuide = () => {
             type="text"
             {...register("title", { required: true })}
             placeholder="Ex: Passionate Explorer of Nature"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 text-stone-500"
           />
         </div>
 
@@ -81,7 +81,7 @@ const JoinAsGuide = () => {
             {...register("reason", { required: true })}
             rows={5}
             placeholder="Tell us about your travel experience, goals, and why you'd be a great guide."
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-emerald-400"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-emerald-400 text-stone-500"
           ></textarea>
         </div>
 
@@ -91,7 +91,7 @@ const JoinAsGuide = () => {
             type="url"
             {...register("cvLink", { required: true })}
             placeholder="https://drive.google.com/your-cv"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 text-stone-500"
           />
         </div>
 
@@ -112,7 +112,7 @@ const JoinAsGuide = () => {
           <div className="modal modal-bottom sm:modal-middle">
             <div className="modal-box text-center">
               <h3 className="font-bold text-lg text-green-600">Application Submitted ✅</h3>
-              <p className="py-4 text-gray-600">We’ll review your application shortly. Thank you!</p>
+              <p className="py-4 text-gray-600 dark:text-white">We’ll review your application shortly. Thank you!</p>
               <div className="modal-action justify-center">
                 <label
                   htmlFor="success-modal"

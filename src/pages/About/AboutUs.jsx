@@ -4,10 +4,13 @@ import CountUp from "react-countup";
 import TypingAnimation from "./TypingAnimation";
 import Contact from "./Contact";
 import { developers } from "../../data/developers ";
+import CustomHelmet from "../../components/shared/CustomHelmet";
 
 const AboutUs = () => {
   return (
     <section className="px-4 py-10 md:px-10 lg:px-20 bg-gradient-to-r from-amber-50 via-blue-100 to-amber-50">
+             <CustomHelmet title="AboutUs - TourWise App" />
+      
       <h2 className="text-4xl font-bold text-center mb-10 text-gray-800">
         Meet Our Developers
       </h2>

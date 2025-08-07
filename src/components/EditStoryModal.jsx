@@ -136,7 +136,7 @@ const EditStoryModal = ({ story, onClose, refetch }) => {
         <div className="flex justify-end gap-3 pt-4">
           <button
             onClick={onClose}
-            className="btn btn-outline btn-sm"
+            className="btn btn-outline btn-sm text-red-500"
             disabled={loading}
           >
             Cancel

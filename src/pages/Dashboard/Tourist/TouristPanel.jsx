@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { NotebookPen, FolderKanban, PlaneTakeoff, Compass, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { TypeAnimation } from 'react-type-animation';
+import CustomHelmet from '../../../components/shared/CustomHelmet';
 
 const cardVariants = {
   hover: {
@@ -14,6 +15,9 @@ const cardVariants = {
 const TouristPanel = () => {
   return (
     <div className="p-6 md:p-10 min-h-screen bg-gradient-to-br from-white via-sky-50 to-blue-100">
+    
+           <CustomHelmet title="Tourist Pannel - TourWise App" />
+    
       {/* Typing Header */}
       <motion.div
         className="text-center mb-6"
@@ -71,7 +75,7 @@ const TouristPanel = () => {
           className="bg-white rounded-2xl shadow-lg p-6 text-center border border-blue-200"
         >
           <PlaneTakeoff className="text-blue-600 mx-auto mb-4" size={42} />
-          <h3 className="text-xl font-semibold mb-2">My Bookings</h3>
+          <h3 className="text-xl font-semibold mb-2 text-indigo-500">My Bookings</h3>
           <p className="text-gray-600 mb-4">View and manage your upcoming or past trips.</p>
           <Link
             to="/dashboard/bookings"
@@ -88,7 +92,7 @@ const TouristPanel = () => {
           className="bg-white rounded-2xl shadow-lg p-6 text-center border border-purple-200"
         >
           <NotebookPen className="text-purple-600 mx-auto mb-4" size={42} />
-          <h3 className="text-xl font-semibold mb-2">Add a Story</h3>
+          <h3 className="text-xl font-semibold mb-2 text-indigo-500">Add a Story</h3>
           <p className="text-gray-600 mb-4">Share your travel tales and inspire others.</p>
           <Link
             to="/dashboard/stories/add"
@@ -105,7 +109,7 @@ const TouristPanel = () => {
           className="bg-white rounded-2xl shadow-lg p-6 text-center border border-emerald-200"
         >
           <FolderKanban className="text-emerald-600 mx-auto mb-4" size={42} />
-          <h3 className="text-xl font-semibold mb-2">Manage Stories</h3>
+          <h3 className="text-xl font-semibold mb-2 text-indigo-500">Manage Stories</h3>
           <p className="text-gray-600 mb-4">Edit or delete your shared stories anytime.</p>
           <Link
             to="/dashboard/manage-stories"
@@ -122,7 +126,7 @@ const TouristPanel = () => {
           className="bg-white rounded-2xl shadow-lg p-6 text-center border border-orange-200 md:col-span-2 lg:col-span-1"
         >
           <Compass className="text-orange-600 mx-auto mb-4" size={42} />
-          <h3 className="text-xl font-semibold mb-2">Join Our Community</h3>
+          <h3 className="text-xl font-semibold mb-2 text-indigo-500">Join Our Community</h3>
           <p className="text-gray-600 mb-4">Connect with fellow travelers, share ideas & get inspired.</p>
           <Link
             to="/community"

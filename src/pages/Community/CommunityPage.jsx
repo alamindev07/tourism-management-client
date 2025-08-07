@@ -77,7 +77,7 @@ const CommunityPage = () => {
   return (
     <section className="px-4 md:px-10 lg:px-20 py-14 min-h-screen ">
        <CustomHelmet title="Community - TourWise App" />
-      <h2 className="text-4xl font-extrabold text-center text-gray-800 mb-8">
+      <h2 className="text-4xl font-extrabold text-center text-gradient-pink mb-8">
         Community Stories
       </h2>
 
@@ -87,7 +87,7 @@ const CommunityPage = () => {
         <input
           type="text"
           placeholder="Search by title or author..."
-          className="flex-1 px-3 py-2 focus:outline-none rounded-full"
+          className="flex-1 px-3 py-2 focus:outline-none rounded-full text-black"
           value={searchTerm}
           onChange={handleSearchChange}
         />

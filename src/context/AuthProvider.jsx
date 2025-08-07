@@ -1,3 +1,5 @@
+
+
 // context/AuthProvider.jsx
 import {
   createUserWithEmailAndPassword,
@@ -12,6 +14,7 @@ import {
 import { createContext, useEffect, useState } from "react";
 import { auth } from "../auth/firebase.config";
 import axios from "axios";
+import { fetchBackendJWT } from "../api/authApi";  // <-- import fetchBackendJWT here
 
 export const AuthContext = createContext();
 
@@ -20,6 +23,7 @@ const googleProvider = new GoogleAuthProvider();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState(null);
 
   const saveUserToDB = async (firebaseUser) => {
     if (!firebaseUser?.email) return;
@@ -29,12 +33,12 @@ const AuthProvider = ({ children }) => {
       name: firebaseUser.displayName || "Anonymous",
       email: firebaseUser.email,
       photoURL: firebaseUser.photoURL || "",
-      role: "tourist", // default role
+      role: "tourist",
     };
 
     try {
       const res = await axios.post(
-        "https://tourism-management-server-two-amber.vercel.app/api/users",
+        "/api/users",
         userData
       );
       console.log("✅ User saved to MongoDB:", res.data);
@@ -47,35 +51,57 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  // 🔐 Create new user (email & password)
+  const fetchAndStoreJWT = async (firebaseUser) => {
+    try {
+      const backendToken = await fetchBackendJWT({
+        email: firebaseUser.email,
+        uid: firebaseUser.uid,
+        role: "tourist",
+      });
+      setToken(backendToken);
+      localStorage.setItem("access_token", backendToken);
+    } catch (error) {
+      console.error("Failed to fetch JWT token", error);
+    }
+  };
+
   const createUser = async (email, password) => {
     setLoading(true);
     const res = await createUserWithEmailAndPassword(auth, email, password);
-    await saveUserToDB(res.user); // Save on registration
+    await saveUserToDB(res.user);
+    await fetchAndStoreJWT(res.user);
+    setUser(res.user);
+    setLoading(false);
     return res;
   };
 
-  // 🔐 Login existing user
-  const login = (email, password) => {
+  const login = async (email, password) => {
     setLoading(true);
-    return signInWithEmailAndPassword(auth, email, password);
+    const res = await signInWithEmailAndPassword(auth, email, password);
+    await fetchAndStoreJWT(res.user);
+    setUser(res.user);
+    setLoading(false);
+    return res;
   };
 
-  // 🔐 Google sign-in
   const signInWithGoogle = async () => {
     setLoading(true);
     const result = await signInWithPopup(auth, googleProvider);
-    await saveUserToDB(result.user); // Save user if not already
+    await saveUserToDB(result.user);
+    await fetchAndStoreJWT(result.user);
+    setUser(result.user);
+    setLoading(false);
     return result;
   };
 
-  // 🔐 Logout
   const logout = () => {
     setLoading(true);
-    return signOut(auth);
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem("access_token");
+    return signOut(auth).finally(() => setLoading(false));
   };
 
-  // 🧑 Update profile
   const updateUserProfile = (name, photo) => {
     return updateProfile(auth.currentUser, {
       displayName: name,
@@ -83,23 +109,29 @@ const AuthProvider = ({ children }) => {
     });
   };
 
-  // 🔁 Reset password
   const resetPassword = (email) => sendPasswordResetEmail(auth, email);
 
-  // 👀 Auth state change listener
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
+      setLoading(true);
+      if (currentUser) {
+        setUser(currentUser);
+        await fetchAndStoreJWT(currentUser);
+      } else {
+        setUser(null);
+        setToken(null);
+        localStorage.removeItem("access_token");
+      }
       setLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
 
-  // 🔁 Provide context values
   const authInfo = {
     user,
     loading,
+    token,
     createUser,
     login,
     logout,

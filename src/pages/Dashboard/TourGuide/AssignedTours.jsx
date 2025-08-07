@@ -1,13 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 const AssignedTours = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   const {
     data: assignedTours = [],
@@ -78,17 +80,31 @@ const AssignedTours = () => {
     }
   };
 
+  // Pagination Logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = assignedTours.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(assignedTours.length / itemsPerPage);
+
+  const handlePageChange = (page) => setCurrentPage(page);
+  const handleNext = () => {
+    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
+  };
+  const handlePrev = () => {
+    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+  };
+
   if (isLoading) return <p className="text-center">Loading...</p>;
   if (isError) return <p className="text-center text-red-500">Error loading tours.</p>;
   if (!assignedTours.length) return <p className="text-center">No assigned tours found.</p>;
 
   return (
     <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Assigned Tours</h2>
+      <h2 className="text-2xl font-bold mb-4 text-pink-700 text-center">Assigned Tours</h2>
       <div className="overflow-x-auto">
         <table className="table w-full">
           <thead>
-            <tr className="bg-gray-100">
+            <tr className="bg-gray-100 dark:bg-gray-200 text-purple-400">
               <th>Package</th>
               <th>Tourist</th>
               <th>Date</th>
@@ -98,7 +114,7 @@ const AssignedTours = () => {
             </tr>
           </thead>
           <tbody>
-            {assignedTours.map((tour) => (
+            {currentItems.map((tour) => (
               <tr key={tour._id}>
                 <td className="py-2">
                   <div className="flex items-center gap-2">
@@ -110,9 +126,9 @@ const AssignedTours = () => {
                     <span>{tour.packageTitle}</span>
                   </div>
                 </td>
-                <td className="py-2">{tour.touristName}</td>
-                <td className="py-2">{new Date(tour.tourDate).toLocaleDateString()}</td>
-                <td className="py-2">${tour.price}</td>
+                <td className="py-2 text-blue-600 text-left">{tour.touristName}</td>
+                <td className="py-2 text-black">{new Date(tour.tourDate).toLocaleDateString()}</td>
+                <td className="py-2 text-pink-600">${tour.price}</td>
                 <td className={`py-2 ${getStatusColor(tour.status)}`}>{tour.status}</td>
                 <td className="py-2 flex gap-2">
                   <button
@@ -135,6 +151,37 @@ const AssignedTours = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-4 gap-2 items-center">
+          <button
+            onClick={handlePrev}
+            disabled={currentPage === 1}
+            className="btn btn-outline btn-sm"
+          >
+            Previous
+          </button>
+
+          {[...Array(totalPages).keys()].map((page) => (
+            <button
+              key={page + 1}
+              onClick={() => handlePageChange(page + 1)}
+              className={`btn btn-sm ${currentPage === page + 1 ? "btn-active" : "btn-outline"}`}
+            >
+              {page + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={handleNext}
+            disabled={currentPage === totalPages}
+            className="btn btn-outline btn-sm"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

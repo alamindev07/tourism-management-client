@@ -109,7 +109,7 @@ const AddStory = () => {
             type="text"
             {...register("title", { required: true })}
             placeholder="A journey to remember..."
-            className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
+            className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600 text-slate-600"
           />
         </div>
 
@@ -119,7 +119,7 @@ const AddStory = () => {
             {...register("description", { required: true })}
             rows="5"
             placeholder="Tell us about your travel experience..."
-            className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
+            className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-slate-600"
           ></textarea>
         </div>
 

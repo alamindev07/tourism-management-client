@@ -1,6 +1,4 @@
-
-
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { FaUserShield, FaUser } from "react-icons/fa";
@@ -12,6 +10,9 @@ import Swal from "sweetalert2";
 const ManageUsers = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8; // changeable (you can add dropdown later)
 
   // Fetch users
   const { data: users = [], isLoading, refetch } = useQuery({
@@ -49,22 +50,30 @@ const ManageUsers = () => {
     });
   };
 
-  if (isLoading) {
-    return (
-      <div className="">
-        <LoadingSpinner />
-      </div>
-    );
-  }
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = users.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(users.length / itemsPerPage);
+
+  const handlePageChange = (page) => setCurrentPage(page);
+  const handleNext = () => {
+    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
+  };
+  const handlePrev = () => {
+    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+  };
+
+  if (isLoading) return <LoadingSpinner />;
 
   return (
-    <div className="p-4 md:p-8">
-      <h2 className="text-2xl font-bold mb-6 text-center text-primary">
+    <div className="p-4 md:p-8  bg-gray-500">
+      <h2 className="text-2xl font-bold mb-6 text-center text-pink-400">
         Manage Users Role
       </h2>
 
       <div className="overflow-x-auto shadow-xl rounded-lg border border-base-200">
-        <table className="table table-zebra w-full text-sm md:text-base">
+        <table className="table  table-zebra   w-full text-sm md:text-base ">
           <thead className="bg-base-200 text-base-content">
             <tr>
               <th className="py-3 px-4">#</th>
@@ -75,9 +84,9 @@ const ManageUsers = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((u, index) => (
-              <tr key={u._id} className="hover:bg-base-100 transition-all duration-300">
-                <td className="px-4 py-2">{index + 1}</td>
+            {currentItems.map((u, index) => (
+              <tr key={u._id} className=" transition-all duration-300">
+                <td className="px-4 py-2">{indexOfFirstItem + index + 1}</td>
                 <td className="px-4 py-2 font-medium">{u.name}</td>
                 <td className="px-4 py-2 text-sm">{u.email}</td>
                 <td className="px-4 py-2">
@@ -106,6 +115,37 @@ const ManageUsers = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-4 gap-2 items-center">
+          <button
+            onClick={handlePrev}
+            disabled={currentPage === 1}
+            className="btn btn-outline btn-sm"
+          >
+            Previous
+          </button>
+
+          {[...Array(totalPages).keys()].map((page) => (
+            <button
+              key={page + 1}
+              onClick={() => handlePageChange(page + 1)}
+              className={`btn btn-sm ${currentPage === page + 1 ? "btn-active" : "btn-outline"}`}
+            >
+              {page + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={handleNext}
+            disabled={currentPage === totalPages}
+            className="btn btn-outline "
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

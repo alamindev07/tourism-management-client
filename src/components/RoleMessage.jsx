@@ -17,7 +17,7 @@ const RoleMessage = ({ role }) => {
           <p className="text-blue-700 mb-4">
             Become a Tour Guide and start sharing your passion for travel with others.
           </p>
-          <Link to="/dashboard/join-tour-guide">
+          <Link to="/dashboard/join-guide">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

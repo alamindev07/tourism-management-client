@@ -10,8 +10,8 @@ const TourGuideCard = ({ guide }) => {
           alt={guide.name}
           className="w-28 h-28 object-cover rounded-full border-4 border-purple-300 hover:border-pink-400 transition duration-300 shadow-md"
         />
-        <h3 className="text-xl font-bold mt-4 text-center text-gray-800 dark:text-white">{guide.name}</h3>
-        <p className="text-sm text-center text-gray-500 dark:text-gray-300">{guide.email}</p>
+        <h3 className="text-xl font-bold mt-4 text-center text-gray-800 dark:text-red-500">{guide.name}</h3>
+        <p className="text-sm text-center text-gray-500 dark:text-amber-400">{guide.email}</p>
 
         <Link
           to={`/dashboard/guide/profile/${guide._id}`}

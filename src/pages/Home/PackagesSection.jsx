@@ -41,15 +41,15 @@ const PackagesSection = () => {
             </figure>
 
             <div className="p-5 space-y-4">
-              <h3 className="text-xl font-semibold text-gray-800 dark:text-white">{pkg.title}</h3>
-              <p className="text-gray-600 dark:text-gray-300 text-sm">{pkg.description?.slice(0, 100)}...</p>
+              <h3 className="text-xl font-semibold text-gray-800 dark:text-purple-500">{pkg.title}</h3>
+              <p className="text-gray-600 dark:gray-amber-400 text-sm">{pkg.description?.slice(0, 100)}...</p>
 
-              <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
-                <span className="flex items-center gap-1">
+              <div className="flex justify-between text-sm">
+                <span className="flex items-center gap-1 text-amber-600">
                   <FaMapMarkerAlt className="text-rose-500" /> {pkg.location}
                 </span>
-                <span className="flex items-center gap-1">
-                  <FaClock className="text-indigo-500" /> {pkg.duration}
+                <span className="flex items-center gap-1 text-stone-600">
+                  <FaClock className="text-indigo-500 " /> {pkg.duration}
                 </span>
               </div>
 

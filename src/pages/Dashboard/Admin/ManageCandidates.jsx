@@ -1,14 +1,17 @@
-
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { toast } from "react-hot-toast";
 import { TypeAnimation } from "react-type-animation";
 import { FaCheckCircle, FaTimesCircle, FaLink } from "react-icons/fa";
 import Swal from "sweetalert2";
+import { useState } from "react";
+
+const ITEMS_PER_PAGE = 5;
 
 const ManageCandidates = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Fetch guide applications
   const { data: applications = [], isLoading } = useQuery({
@@ -19,27 +22,20 @@ const ManageCandidates = () => {
     },
   });
 
-  // Accept mutation: promote role + delete application in backend PATCH call
+  // Accept mutation
   const acceptMutation = useMutation({
     mutationFn: async (app) => {
-      const res = await axiosSecure.patch(`/api/users/role/by-email/${app.email}`, { role: "tourguide" });
-      return res.data; // Expecting { applicationDeleted: true/false }
+      const res = await axiosSecure.patch(
+        `/api/users/role/by-email/${app.email}`,
+        { role: "tourguide" }
+      );
+      return res.data;
     },
     onSuccess: (data) => {
       if (data.applicationDeleted) {
-        // toast.success("User promoted to Tour Guide and application removed!");
-        Swal.fire(
-            "Cancelled!",
-            "User promoted to Tour Guide and application removed!",
-            "success"
-          );
+        Swal.fire("Approved!", "User promoted and application removed!", "success");
       } else {
-        // toast.success("User promoted to Tour Guide!");
-        Swal.fire(
-                    "Approved!",
-                    "User promoted to Tour Guide!",
-                    "success"
-                  );
+        Swal.fire("Approved!", "User promoted to Tour Guide!", "success");
       }
       queryClient.invalidateQueries(["guideApplications"]);
     },
@@ -48,18 +44,13 @@ const ManageCandidates = () => {
     },
   });
 
-  // Reject mutation: delete application after SweetAlert confirmation
+  // Reject mutation
   const rejectMutation = useMutation({
     mutationFn: async (id) => {
       await axiosSecure.delete(`/api/guide-applications/${id}`);
     },
     onSuccess: () => {
-      // toast.success("Application rejected.");
-      Swal.fire(
-            "Cancelled!",
-            "Application rejected.",
-            "success"
-          );
+      Swal.fire("Cancelled!", "Application rejected.", "success");
       queryClient.invalidateQueries(["guideApplications"]);
     },
     onError: () => {
@@ -67,7 +58,6 @@ const ManageCandidates = () => {
     },
   });
 
-  // Handle Reject button click with confirmation dialog
   const handleReject = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -84,6 +74,11 @@ const ManageCandidates = () => {
       }
     });
   };
+
+  // Pagination logic
+  const totalPages = Math.ceil(applications.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentApplications = applications.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   return (
     <div className="p-6 md:p-10 bg-gradient-to-br from-white via-sky-50 to-cyan-100 min-h-screen">
@@ -102,76 +97,104 @@ const ManageCandidates = () => {
           repeat={Infinity}
           className="text-3xl md:text-4xl font-bold text-cyan-700"
         />
-        <p className="text-gray-600 mt-2">Handle tour guide requests responsibly and efficiently.</p>
+        <p className="text-gray-600 mt-2">
+          Handle tour guide requests responsibly and efficiently.
+        </p>
       </div>
 
       {isLoading ? (
         <div className="text-center text-xl text-gray-600">Loading Applications...</div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white shadow-lg rounded-xl border border-gray-200">
-            <thead className="bg-cyan-600 text-white text-sm md:text-base">
-              <tr>
-                <th className="px-4 py-3 text-left">Name</th>
-                <th className="px-4 py-3 text-left">Email</th>
-                <th className="px-4 py-3 text-left">Title</th>
-                <th className="px-4 py-3 text-left">Reason</th>
-                <th className="px-4 py-3 text-left">CV</th>
-                <th className="px-4 py-3 text-left">Role</th>
-                <th className="px-4 py-3 text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {applications.length === 0 && (
+        <>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white shadow-lg rounded-xl border border-gray-200">
+              <thead className="bg-cyan-600 text-white text-sm md:text-base">
                 <tr>
-                  <td colSpan="7" className="text-center py-6 text-gray-500">
-                    No applications found.
-                  </td>
+                  <th className="px-4 py-3 text-left">Name</th>
+                  <th className="px-4 py-3 text-left">Email</th>
+                  <th className="px-4 py-3 text-left">Title</th>
+                  <th className="px-4 py-3 text-left">Reason</th>
+                  <th className="px-4 py-3 text-left">CV</th>
+                  <th className="px-4 py-3 text-left">Role</th>
+                  <th className="px-4 py-3 text-center">Actions</th>
                 </tr>
-              )}
-              {applications.map((app) => (
-                <tr
-                  key={app._id}
-                  className="border-t text-sm md:text-base hover:bg-cyan-50 transition duration-150"
-                >
-                  <td className="px-4 py-3">{app.name || "Unknown"}</td>
-                  <td className="px-4 py-3">{app.email}</td>
-                  <td className="px-4 py-3">{app.title}</td>
-                  <td className="px-4 py-3 max-w-md line-clamp-3">{app.reason}</td>
-                  <td className="px-4 py-3">
-                    <a
-                      href={app.cvLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline flex items-center gap-1"
+              </thead>
+              <tbody>
+                {currentApplications.length === 0 ? (
+                  <tr>
+                    <td colSpan="7" className="text-center py-6 text-gray-500">
+                      No applications found.
+                    </td>
+                  </tr>
+                ) : (
+                  currentApplications.map((app) => (
+                    <tr
+                      key={app._id}
+                      className="border-t text-sm md:text-base hover:bg-cyan-50 transition duration-150"
                     >
-                      <FaLink /> View CV
-                    </a>
-                  </td>
-                  <td className="px-4 py-3 text-center capitalize text-emerald-600 font-semibold">
-                    tourist
-                  </td>
-                  <td className="px-4 py-3 flex gap-3 justify-center">
-                    <button
-                      onClick={() => acceptMutation.mutate(app)}
-                      className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-full text-sm flex items-center gap-1 cursor-pointer"
-                      disabled={acceptMutation.isLoading}
-                    >
-                      <FaCheckCircle /> Accept
-                    </button>
-                    <button
-                      onClick={() => handleReject(app._id)}
-                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-full text-sm flex items-center gap-1 cursor-pointer"
-                      disabled={rejectMutation.isLoading}
-                    >
-                      <FaTimesCircle /> Reject
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                      <td className="px-4 py-3 text-sky-500 font-bold">{app.name || "Unknown"}</td>
+                      <td className="px-4 py-3 text-accent">{app.email}</td>
+                      <td className="px-4 py-3 text-fuchsia-500">{app.title}</td>
+                      <td className="px-4 py-3 max-w-md line-clamp-3 text-orange-400">{app.reason}</td>
+                      <td className="px-4 py-3">
+                        <a
+                          href={app.cvLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline flex items-center gap-1"
+                        >
+                          <FaLink /> View CV
+                        </a>
+                      </td>
+                      <td className="px-4 py-3 text-center capitalize text-emerald-600 font-semibold">
+                        tourist
+                      </td>
+                      <td className="px-4 py-3 flex gap-3 justify-center">
+                        <button
+                          onClick={() => acceptMutation.mutate(app)}
+                          className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-full text-sm flex items-center gap-1"
+                          disabled={acceptMutation.isLoading}
+                        >
+                          <FaCheckCircle /> Accept
+                        </button>
+                        <button
+                          onClick={() => handleReject(app._id)}
+                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-full text-sm flex items-center gap-1"
+                          disabled={rejectMutation.isLoading}
+                        >
+                          <FaTimesCircle /> Reject
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex justify-center mt-6 gap-4">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 bg-cyan-600 text-white rounded-lg disabled:bg-gray-300"
+              >
+                Previous
+              </button>
+              <span className="self-center text-slate-700">
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 bg-cyan-600 text-white rounded-lg disabled:bg-gray-300"
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

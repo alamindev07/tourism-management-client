@@ -1,67 +1,3 @@
-// import { useState } from "react";
-// import { motion } from "framer-motion";
-// import { Info } from "lucide-react";
-
-// const AboutTour = ({ pkg }) => {
-//   const [expanded, setExpanded] = useState(false);
-//   const maxChars = 300;
-
-//   const shortText =
-//     pkg.description?.length > maxChars
-//       ? pkg.description.slice(0, maxChars) + "..."
-//       : pkg.description;
-
-//   return (
-//     <motion.section
-//       className="bg-gradient-to-br from-blue-50 via-white to-blue-50 rounded-xl p-6 md:p-10 shadow-md border border-gray-200 mt-8"
-//       initial={{ opacity: 0, y: 20 }}
-//       animate={{ opacity: 1, y: 0 }}
-//       transition={{ duration: 0.6 }}
-//     >
-//       {/* Heading */}
-//       <div className="flex items-center gap-2 mb-4">
-//         <Info className="text-blue-600 w-7 h-7" />
-//         <h2 className="text-3xl font-bold text-gray-800">About The Tour</h2>
-//       </div>
-
-//       {/* Tour Description */}
-//       <p className="text-gray-700 leading-relaxed text-lg">
-//         {expanded ? pkg.description : shortText}
-//       </p>
-
-//       {/* Read More / Read Less */}
-//       {pkg.description?.length > maxChars && (
-//         <button
-//           className="mt-4 text-blue-600 hover:text-blue-800 font-semibold underline transition-colors"
-//           onClick={() => setExpanded(!expanded)}
-//         >
-//           {expanded ? "Read Less" : "Read More"}
-//         </button>
-//       )}
-
-//       {/* Extra Info (optional) */}
-//       <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-//         <div className="p-4 rounded-lg bg-white shadow hover:shadow-lg transition-shadow">
-//           <h3 className="text-lg font-semibold text-gray-800">Duration</h3>
-//           <p className="text-gray-600">{pkg.duration || "N/A"}</p>
-//         </div>
-//         <div className="p-4 rounded-lg bg-white shadow hover:shadow-lg transition-shadow">
-//           <h3 className="text-lg font-semibold text-gray-800">Group Size</h3>
-//           <p className="text-gray-600">{pkg.groupSize || "Flexible"}</p>
-//         </div>
-//         <div className="p-4 rounded-lg bg-white shadow hover:shadow-lg transition-shadow">
-//           <h3 className="text-lg font-semibold text-gray-800">Location</h3>
-//           <p className="text-gray-600">{pkg.location || "Worldwide"}</p>
-//         </div>
-//       </div>
-//     </motion.section>
-//   );
-// };
-
-// export default AboutTour;
-
-
-
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -99,7 +35,7 @@ const AboutTour = ({ pkg }) => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 8 }}
         transition={{ duration: 0.4 }}
-        className="max-w-3xl text-lg font-medium leading-relaxed text-gradient-text"
+        className="max-w-3xl text-lg font-medium leading-relaxed text-slate-600600 dark:text-red-200"
       >
         {expanded ? pkg.description : shortText}
       </motion.p>
@@ -146,7 +82,7 @@ const AboutTour = ({ pkg }) => {
             className="bg-gradient-to-br from-blue-100 via-steel to-blue-100 cursor-pointer flex flex-col items-center gap-1 p-2 rounded-lg"
             aria-label={`${label}: ${value}`}
           >
-            <div className="text-3xl">{icon}</div>
+            <div className="text-3xl ">{icon}</div>
             <h3 className="text-xl font-semibold text-gradient-blue">{label}</h3>
             <p className="text-md font-medium text-gradient-text">{value}</p>
           </motion.div>

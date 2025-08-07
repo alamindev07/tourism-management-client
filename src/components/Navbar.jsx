@@ -4,10 +4,10 @@ import { Link, NavLink } from "react-router-dom";
 import { useContext } from "react";
 import logo from "../assets/navbarLogo.jpg";
 import { AuthContext } from "../context/AuthProvider";
-import toast from "react-hot-toast";
 import { FaUserCircle } from "react-icons/fa";
 
 import { FiUser, FiMail, FiGrid, FiGift, FiLogOut } from "react-icons/fi";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -15,7 +15,11 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      toast.success("Logged out successfully");
+Swal.fire({
+        icon: "success",
+        title: "Logout Successful!",
+        confirmButtonColor: "#3085d6",
+      });
     } catch (err) {
       console.error("Logout error:", err);
     }
@@ -135,10 +139,10 @@ const Navbar = () => {
             </div>
           ) : (
             <div className="flex gap-2">
-              <Link to="/login" className="btn btn-sm btn-outline rounded-full px-4">
+              <Link to="/login" className="btn btn-sm btn-outline btn-accent rounded-full px-4">
                 Login
               </Link>
-              <Link to="/register" className="btn btn-sm bg-blue-600 text-white rounded-full px-4 hover:bg-blue-700">
+              <Link to="/register" className="btn btn-sm bg-purple-600 text-white rounded-full px-4 hover:bg-blue-700">
                 Register
               </Link>
             </div>

@@ -14,7 +14,7 @@ const WhyChooseUsSection = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-3xl md:text-4xl font-bold text-center mb-10"
+        className="text-3xl md:text-4xl font-bold text-center mb-10 text-black dark:text-purple-500"
       >
         Why Choose Us?
       </motion.h2>
@@ -29,7 +29,7 @@ const WhyChooseUsSection = () => {
             className="bg-white shadow rounded-xl p-6 text-center hover:shadow-lg transition bg-gradient-to-r from-blue-100 via-green-100 to-amber-50"
           >
             <div className="text-4xl mb-4">{item.icon}</div>
-            <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
+            <h3 className="font-semibold text-lg mb-2 text-amber-600">{item.title}</h3>
             <p className="text-gray-600 text-sm">{item.desc}</p>
           </motion.div>
         ))}

@@ -46,7 +46,7 @@ const TourGuidesSection = ({ guides }) => {
                   alt={guide.displayName}
                   className="w-24 h-24 rounded-full object-cover mb-3 ring-2 ring-transparent group-hover:ring-primary transition-all duration-300"
                 />
-                <span className="font-semibold text-lg group-hover:text-primary transition">
+                <span className="font-semibold text-lg group-hover:text-primary transition text-pink-400">
                   {guide.name}
                 </span>
                 <span className="mt-5 inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full border border-purple-500 text-purple-700 hover:bg-purple-600 hover:text-white transition-all duration-300 font-medium shadow-sm">

@@ -1,7 +1,6 @@
-
 import { useContext, useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 import { FcGoogle } from "react-icons/fc";
 import loginImage from "../../assets/login.json";
 import { AuthContext } from "../../context/AuthProvider";
@@ -18,9 +17,6 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || location.state?.shareUrl || "/";
-// console.log("Login location.state:", location.state);
-
-
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -32,7 +28,6 @@ const Login = () => {
     const password = form.password.value;
 
     setEmailForReset(email);
-    toast.loading("Logging in...");
 
     try {
       const result = await login(email, password);
@@ -44,14 +39,22 @@ const Login = () => {
         console.error("Failed to save user after login:", saveErr);
       }
 
-      toast.dismiss(); // dismiss loading toast
-      toast.success("Login successful!");
+      Swal.fire({
+        icon: "success",
+        title: "Login Successful!",
+        text: `Welcome back, ${user.displayName || user.email}`,
+        confirmButtonColor: "#3085d6",
+      });
+
       navigate(from, { replace: true });
     } catch (err) {
-      toast.dismiss();
       console.error("Login error:", err);
       setError("Invalid email or password");
-      toast.error("Login failed");
+      Swal.fire({
+        icon: "error",
+        title: "Login Failed",
+        text: "Invalid email or password",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -60,7 +63,6 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     setError("");
     setIsGoogleLoading(true);
-    toast.loading("Logging in with Google...");
 
     try {
       const result = await signInWithGoogle();
@@ -72,14 +74,22 @@ const Login = () => {
         console.error("Failed to save Google user:", saveErr);
       }
 
-      toast.dismiss();
-      toast.success("Logged in with Google!");
+      Swal.fire({
+        icon: "success",
+        title: "Google Login Successful!",
+        text: `Welcome, ${user.displayName || user.email}`,
+        confirmButtonColor: "#3085d6",
+      });
+
       navigate(from, { replace: true });
     } catch (err) {
-      toast.dismiss();
       console.error("Google login error:", err);
       setError("Google sign-in failed.");
-      toast.error("Google sign-in failed.");
+      Swal.fire({
+        icon: "error",
+        title: "Google Sign-In Failed",
+        text: "Please try again later.",
+      });
     } finally {
       setIsGoogleLoading(false);
     }
@@ -87,16 +97,28 @@ const Login = () => {
 
   const handleForgotPassword = async () => {
     if (!emailForReset) {
-      toast.error("Please enter your email first");
+      Swal.fire({
+        icon: "warning",
+        title: "No Email Entered",
+        text: "Please enter your email first.",
+      });
       return;
     }
 
     try {
       await resetPassword(emailForReset);
-      toast.success("Password reset email sent!");
+      Swal.fire({
+        icon: "success",
+        title: "Password Reset Email Sent!",
+        text: "Check your inbox for the reset link.",
+      });
     } catch (err) {
       console.error("Password reset error:", err);
-      toast.error("Failed to send reset email");
+      Swal.fire({
+        icon: "error",
+        title: "Password Reset Failed",
+        text: "Unable to send reset email. Try again later.",
+      });
     }
   };
 
@@ -119,7 +141,7 @@ const Login = () => {
                 name="email"
                 required
                 onChange={(e) => setEmailForReset(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg bg-slate-100 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-500"
+                className="w-full px-4 py-2 rounded-lg bg-slate-100 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-500 text-black "
               />
             </div>
             <div>
@@ -128,7 +150,7 @@ const Login = () => {
                 type="password"
                 name="password"
                 required
-                className="w-full px-4 py-2 rounded-lg bg-slate-100 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-500"
+                className="w-full px-4 py-2 rounded-lg bg-slate-100 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-500 text-black"
               />
             </div>
 

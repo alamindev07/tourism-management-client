@@ -1,74 +1,108 @@
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react"; 
+const GallerySection = ({ pkg }) => {
+  const galleryItems = pkg?.images || [];
+  const [selectedImage, setSelectedImage] = useState(null);
 
-import { useState, useEffect } from "react";
-
-const ImageGallery = ({ pkg }) => {
-  const images = pkg?.images || [];
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-
-  // Auto-slide every 3 seconds
-  useEffect(() => {
-    if (!images.length) return;
-    const interval = setInterval(() => {
-      setSelectedIndex((prev) => (prev + 1) % images.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [images.length]);
-
-  if (!images.length) {
-    return <div className="p-4 text-center text-gray-500">No images available</div>;
+  if (!galleryItems.length) {
+    return (
+      <div className="p-4 text-center text-gray-500">No images available</div>
+    );
   }
 
   return (
-    <div className="flex flex-col items-center">
-      {/* Main Image */}
-      <div
-        className="w-full max-w-4xl h-80 mb-4 cursor-zoom-in relative"
-        onClick={() => setLightboxOpen(true)}
-      >
-        <img
-          src={images[selectedIndex]}
-          alt="Selected"
-          className="w-full h-full object-cover rounded-lg shadow-md transition-all duration-300"
-        />
-        <div className="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white px-2 py-1 text-sm rounded">
-          Click to zoom
+    <div className="max-w-7xl mx-auto px-4 py-12">
+      <h2 className="text-3xl font-bold text-center mb-12">Gallery</h2>
+
+      {/* --- Custom Grid Layout --- */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 lg:grid-rows-2 gap-4">
+        <div
+          className="lg:col-span-2 lg:row-span-2 relative rounded-xl overflow-hidden shadow-lg cursor-pointer group"
+          onClick={() => setSelectedImage(galleryItems[0])}
+        >
+          <img
+            src={galleryItems[0]}
+            alt="gallery-1"
+            className="w-full h-full object-cover transform transition duration-500 group-hover:scale-110"
+          />
         </div>
-      </div>
-
-      {/* Thumbnail list */}
-      <div className="flex gap-3 overflow-x-auto pb-2">
-        {images.map((img, index) => (
+        <div
+          className="lg:col-span-2 relative rounded-xl overflow-hidden shadow-lg cursor-pointer group"
+          onClick={() => setSelectedImage(galleryItems[1])}
+        >
           <img
-            key={index}
-            src={img}
-            alt={`Thumb-${index}`}
-            className={`w-20 h-20 object-cover rounded-md cursor-pointer border-2 ${
-              selectedIndex === index ? "border-blue-500" : "border-transparent"
-            }`}
-            onClick={() => setSelectedIndex(index)}
+            src={galleryItems[1]}
+            alt="gallery-2"
+            className="w-full h-full object-cover transform transition duration-500 group-hover:scale-110"
           />
-        ))}
-      </div>
-
-      {/* Lightbox Modal */}
-      {lightboxOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
+        </div>
+        <div
+          className="lg:col-span-2 relative rounded-xl overflow-hidden shadow-lg cursor-pointer group"
+          onClick={() => setSelectedImage(galleryItems[2])}
+        >
           <img
-            src={images[selectedIndex]}
-            alt="Full Screen"
-            className="max-w-full max-h-full rounded-lg"
+            src={galleryItems[2]}
+            alt="gallery-3"
+            className="w-full h-full object-cover transform transition duration-500 group-hover:scale-110"
           />
-          <button
-            className="absolute top-5 right-5 text-white text-3xl font-bold"
-            onClick={() => setLightboxOpen(false)}
+        </div>
+        <div
+          className="lg:col-span-2 relative rounded-xl overflow-hidden shadow-lg cursor-pointer group"
+          onClick={() => setSelectedImage(galleryItems[3])}
+        >
+          <img
+            src={galleryItems[3]}
+            alt="gallery-4"
+            className="w-full h-full object-cover transform transition duration-500 group-hover:scale-110"
+          />
+        </div>
+        {galleryItems[4] && (
+          <div
+            className="lg:col-span-2 lg:row-span-2 flex items-center justify-center cursor-pointer"
+            onClick={() => setSelectedImage(galleryItems[4])}
           >
-            &times;
-          </button>
-        </div>
-      )}
+            <div className="w-56 h-56 rounded-full overflow-hidden shadow-lg group relative">
+              <img
+                src={galleryItems[4]}
+                alt="gallery-5"
+                className="w-full h-full object-cover transform transition duration-500 group-hover:scale-110"
+              />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* --- Image Zoom Modal --- */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            {/* Close Button */}
+            <button
+              className="absolute top-6 right-6 bg-white/80 hover:bg-white text-black rounded-full p-2 shadow-lg"
+              onClick={() => setSelectedImage(null)}
+            >
+              <X size={24} />
+            </button>
+
+            <motion.img
+              src={selectedImage}
+              alt="Zoomed"
+              className="max-w-4xl w-full max-h-[90vh] object-contain rounded-xl"
+              initial={{ scale: 0.7 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.7 }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
-export default ImageGallery;
+export default GallerySection;

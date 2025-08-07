@@ -74,15 +74,15 @@ useEffect(() => {
 
         <div className="mt-4 md:mt-0 flex-1 space-y-2 font-bold">
           <p className="flex items-center text-lg">
-           User Email <MdEmail className="text-[#0077b6] mr-2" /> :  <span className='ml-1 text-green-500 font-semibold'>{dbUser.email}</span>
+      <span className='flex justify-center items-center lg:gap-2 text-black text-sm lg:text-2xl'>User Email <MdEmail className="text-[#0077b6] mr-2" /> :</span> <span className='ml-1 lg:ml-2 text-green-500 font-semibold text-xs lg:text-2xl'>{dbUser.email}</span>
           </p>
           <p className="flex items-center text-lg font-bold">
-           User Role <MdOutlineVerifiedUser className="text-[#0077b6] mr-2" /> : 
-            <span className="capitalize font-normal ml-1 text-red-500">{dbUser.role}</span>
+               <span className='flex justify-center items-center lg:gap-2 text-black text-sm lg:text-2xl'>User Role<MdOutlineVerifiedUser className="text-[#0077b6] mr-2" /> :</span> <span className='ml-1 lg:ml-2 text-red-500 font-semibold text-xs lg:text-2xl'>{dbUser.role}</span>           
           </p>
-          <p className="flex items-center text-lg font-bold">
-           Phone No <FaPhoneAlt className="text-[#0077b6] mr-2" />:
-            <span className='ml-1 font-semibold'>{dbUser.phone || 'Not set'}</span>
+          <p className="flex items-center text-lg font-bold">            
+           <span className='flex justify-center items-center lg:gap-2 text-black text-sm lg:text-2xl'>Phone<FaPhoneAlt className="text-[#0077b6] mr-2" /> :</span> <span className='ml-1 lg:ml-2 text-gray-500 font-semibold text-xs lg:text-2xl'>{dbUser.phone || 'Not set Yet'}</span>           
+
+
           </p>
 
           <button
@@ -109,7 +109,7 @@ useEffect(() => {
             <h3 className="text-xl font-semibold mb-4 text-[#0077b6]">Edit Your Profile</h3>
             <form onSubmit={handleUpdate} className="space-y-4">
               <div>
-                <label className="label">Full Name</label>
+                <label className="label text-black dark:text-amber-600 ">Full Name</label>
                 <input
                   type="text"
                   className="input input-bordered w-full"
@@ -120,7 +120,7 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="label">Image URL</label>
+                <label className="label text-black dark:text-amber-600">Image URL</label>
                 <input
                   type="text"
                   className="input input-bordered w-full"
@@ -131,10 +131,11 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="label">Phone Number</label>
+                <label className="label text-black dark:text-amber-600">Phone Number</label>
                 <input
                   type="tel"
-                  className="input input-bordered w-full"
+                  className="input input-bordered w-full "
+                  placeholder='Set your Phone Number'
                   value={editData.phone}
                   onChange={(e) => setEditData({ ...editData, phone: e.target.value })}
                 />
@@ -144,7 +145,7 @@ useEffect(() => {
                 <button
                   type="button"
                   onClick={() => setOpenModal(false)}
-                  className="btn btn-ghost"
+                  className="btn btn-ghost text-red-400"
                 >
                   Cancel
                 </button>

@@ -160,7 +160,7 @@ if (alreadyBooked) {
         </>
       )}
 
-      <section className="w-full max-w-3xl mx-auto bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-10 border border-gray-200 dark:border-gray-700 relative bg-gradient-to-r from-pink-100 via-blue-100 to-purple-100">
+      <section className="w-full max-w-3xl mx-auto   rounded-3xl shadow-2xl p-10 border border-gray-200 dark:border-gray-700 relative  bg-gradient-to-r from-pink-100 via-blue-100 to-purple-200 dark:text-stone-600">
         <div className="flex items-center gap-3 mb-10 justify-center">
           <h2 className="text-4xl font-extrabold text-center">Book Your Adventure</h2>
         </div>
@@ -188,11 +188,11 @@ if (alreadyBooked) {
           </div>
           <div>
             <label className="label-text">Select Date</label>
-            <DatePicker selected={selectedDate} onChange={setSelectedDate} minDate={new Date()} placeholderText="Choose a date" className="input input-bordered w-full" required />
+            <DatePicker  selected={selectedDate} onChange={setSelectedDate} minDate={new Date()} placeholderText="Choose a date" className="input input-bordered w-full  dark:text-white" required />
           </div>
           <div className="md:col-span-2">
             <label className="label-text">Choose Tour Guide</label>
-            <select value={selectedGuide} onChange={(e) => setSelectedGuide(e.target.value)} required className="select select-bordered w-full">
+            <select value={selectedGuide} onChange={(e) => setSelectedGuide(e.target.value)} required className="select select-bordered w-full dark:text-white ">
               <option value="" disabled>
                 -- Select a guide --
               </option>
