@@ -62,3 +62,7 @@ The frontend is built with React.js, and the backend uses Node.js and Express.js
    git clone https://github.com/alamindev07/tourism-management-client.git
    cd tourism-management-client
 
+---
+
+*Built with ❤️ by Md Al-amin Mia*
+
